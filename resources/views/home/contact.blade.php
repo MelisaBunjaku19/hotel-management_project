@@ -17,12 +17,14 @@
         }
 
         .contact .titlepage h2 {
-            font-size: 36px;
-            color: #333;
-            text-align: center;
-            margin: 40px 0;
-        }
-
+        font-size: 42px; /* Same font size as About Us title */
+        color: #212121; /* Darker color for title */
+        font-weight: 700; /* Same font weight */
+        margin-bottom: 20px; /* Margin consistent with About Us */
+        text-transform: uppercase; /* Uppercase text */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        text-align: center; /* Centered alignment */
+    }
         .contact .main_form {
             background-color: #fff;
             padding: 30px;

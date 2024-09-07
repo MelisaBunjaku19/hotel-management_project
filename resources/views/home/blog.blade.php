@@ -23,18 +23,21 @@
             background-color: #343a40;
         }
         .header {
-      background: #333; /* Dark gray background */
-      color:white; /* Light gray text */
-      padding: 15px 0;
-      border-bottom: 2px solid #444; /* Slightly lighter gray border */
-    }
-    .footer {
-      background: #333; /* Dark gray background */
-      color: #f5f5f5; /* Light gray text */
-      padding: 40px 0;
-      text-align: center;
-      border-top: 2px solid #444; /* Slightly lighter gray border */
-    }
+            background: #333; /* Dark gray background */
+            color: white; /* Light gray text */
+            padding: 15px 0;
+            border-bottom: 2px solid #444; /* Slightly lighter gray border */
+        }
+        .footer {
+            background: #333; /* Dark gray background */
+            color: #f5f5f5; /* Light gray text */
+            padding: 40px 0;
+            text-align: center;
+            border-top: 2px solid #444; /* Slightly lighter gray border */
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -43,8 +46,19 @@
 
 <div class="blog">
     <div class="container">
+        <!-- Search Form -->
         <div class="row mb-4">
             <div class="col-md-12">
+                <div class="search-form">
+                    <form method="GET" action="{{ route('blog.index') }}">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="searchQuery" placeholder="Search blogs" value="{{ request()->input('searchQuery') }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="titlepage">
                     <h2>Blog</h2>
                     <p>Discover our latest updates and stories on hotel management, travel tips, and more.</p>
@@ -52,12 +66,11 @@
             </div>
         </div>
         <div class="row">
-            @foreach($blogs as $blog)
+            @forelse($blogs as $blog)
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="blog_card card">
                     <div class="blog_img card-img-top">
-                    <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}">
-               
+                        <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $blog->title }}</h5>
@@ -66,7 +79,11 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="col-md-12">
+                <p>No blog posts found.</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </div>

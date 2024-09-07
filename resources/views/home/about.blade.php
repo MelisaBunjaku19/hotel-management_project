@@ -10,119 +10,149 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
     <style>
-        /* Modern and sleek styles for the About Us page */
-        body {
-            background-color: #f4f4f4; /* Light gray background */
-            color: #333; /* Dark text color for contrast */
-            font-family: 'Open Sans', sans-serif; /* Clean and modern font */
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        .about {
-            padding: 60px 20px; /* Responsive padding */
-            text-align: center;
-        }
-
-        .about .titlepage h2 {
-            font-size: 42px;
-            color: #212121; /* Darker color for title */
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .about .titlepage p {
-            font-size: 18px;
-            color: #666; /* Softer text color */
-            max-width: 800px;
-            margin: 0 auto 30px; /* Centered text with margin */
-            line-height: 1.8;
-        }
-
-        .about .titlepage a {
-            display: inline-block;
-            font-size: 16px;
-            color: #fff; /* White text */
-            background: linear-gradient(45deg, #ff6f61, #d84a59); /* Modern gradient background */
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 30px; /* Rounded button */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
-            transition: all 0.3s ease; /* Smooth transition */
-            margin-top: 20px;
-        }
-
-        .about .titlepage a:hover {
-            background: linear-gradient(45deg, #d84a59, #ff6f61); /* Reverse gradient on hover */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Deeper shadow on hover */
-            transform: translateY(-3px); /* Slight lift on hover */
-        }
-
-        .about .about_img img {
-            width: 100%;
-            border-radius: 15px; /* Rounded corners */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
-            margin-top: 30px;
-        }
-
-        .about .more-info {
-            display: none; /* Hidden by default */
-            margin-top: 50px;
-            padding: 20px;
-        }
-
-        .about .more-info .info-item {
-            background-color: #fff; /* White background */
-            border-radius: 12px; /* Rounded corners */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: left; /* Left-aligned text for readability */
-        }
-
-        .about .more-info h3 {
-            font-size: 24px;
-            color: #212121; /* Dark text for titles */
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .about .more-info p {
-            font-size: 16px;
-            color: #555; /* Softer text color */
-            line-height: 1.7;
-        }
-
-        .about .more-info a.btn-primary {
-            background-color: #ff6f61; /* Primary button color */
-            border-color: #ff6f61;
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease;
-        }
-
-        .about .more-info a.btn-primary:hover {
-            background-color: #d84a59; /* Darker color on hover */
-        }
-        .header {
-      background: #333; /* Dark gray background */
-      color:white; /* Light gray text */
-      padding: 15px 0;
-      border-bottom: 2px solid #444; /* Slightly lighter gray border */
+    /* Modern and sleek styles for the About Us page */
+    body {
+        background-color: #f4f4f4; /* Light gray background */
+        color: #333; /* Dark text color for contrast */
+        font-family: 'Open Sans', sans-serif; /* Clean and modern font */
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
     }
+
+    .about {
+        padding: 60px 20px; /* Responsive padding */
+        text-align: center;
+    }
+
+    .about .titlepage h2 {
+        font-size: 42px;
+        color: #212121; /* Darker color for title */
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+    }
+
+    .about .titlepage p {
+        font-size: 18px;
+        color: #666; /* Softer text color */
+        max-width: 800px;
+        margin: 0 auto 30px; /* Centered text with margin */
+        line-height: 1.8;
+    }
+
+    .about .titlepage a {
+        display: inline-block;
+        font-size: 16px;
+        color: #fff; /* White text */
+        background: linear-gradient(45deg, #ff6f61, #d84a59); /* Modern gradient background */
+        text-decoration: none;
+        padding: 12px 30px;
+        border-radius: 30px; /* Rounded button */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
+        transition: all 0.3s ease; /* Smooth transition */
+        margin-top: 20px;
+    }
+
+    .about .titlepage a:hover {
+        background: linear-gradient(45deg, #d84a59, #ff6f61); /* Reverse gradient on hover */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Deeper shadow on hover */
+        transform: translateY(-3px); /* Slight lift on hover */
+    }
+
+    .about .about_img img {
+        width: 100%;
+        border-radius: 15px; /* Rounded corners */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+        margin-top: 30px;
+    }
+
+    .about .more-info {
+        display: none; /* Hidden by default */
+        margin-top: 50px;
+        padding: 20px;
+    }
+
+    .about .more-info .info-item {
+        background-color: #fff; /* White background */
+        border-radius: 20px; /* Rounded corners with larger radius */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: left; /* Left-aligned text for readability */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+        position: relative; /* For pseudo-element positioning */
+        overflow: hidden; /* Ensure rounded corners apply to content */
+    }
+
+    .about .more-info .info-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05)); /* Gradient overlay */
+        opacity: 0.3;
+        z-index: 1;
+    }
+
+    .about .more-info .info-item:hover {
+        transform: translateY(-10px); /* Lift effect on hover */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+    }
+
+    .about .more-info h3 {
+        font-size: 26px;
+        color: #212121; /* Dark text for titles */
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-family: 'Roboto', sans-serif; /* Better font for headers */
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+    }
+
+    .about .more-info p {
+        font-size: 18px;
+        color: #555; /* Softer text color */
+        line-height: 1.7;
+        font-family: 'Open Sans', sans-serif; /* Better font for paragraphs */
+        margin-bottom: 20px;
+    }
+
+    .about .more-info a.btn-primary {
+        background-color: #ff6f61; /* Primary button color */
+        border-color: #ff6f61;
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-size: 14px;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+        position: relative; /* For pseudo-element positioning */
+        overflow: hidden; /* Ensure rounded corners apply to button */
+    }
+
+    .about .more-info a.btn-primary:hover {
+        background-color: #d84a59; /* Darker color on hover */
+    }
+
+    .header {
+        background: #333; /* Dark gray background */
+        color: white; /* Light gray text */
+        padding: 15px 0;
+        border-bottom: 2px solid #444; /* Slightly lighter gray border */
+    }
+
     .footer {
-      background: #333; /* Dark gray background */
-      color: #f5f5f5; /* Light gray text */
-      padding: 40px 0;
-      text-align: center;
-      border-top: 2px solid #444; /* Slightly lighter gray border */
+        background: #333; /* Dark gray background */
+        color: #f5f5f5; /* Light gray text */
+        padding: 40px 0;
+        text-align: center;
+        border-top: 2px solid #444; /* Slightly lighter gray border */
     }
-    </style>
+</style>
+
 </head>
 <body>
 

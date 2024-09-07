@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Booking;
+
 use Illuminate\Http\Request;
 
 
@@ -11,23 +13,18 @@ class RoomController extends Controller
     public function index()
     {
         // Check if the user is authenticated
-        if (auth()->check()) {
-            $userBookings = auth()->user()->bookings()->pluck('room_id')->toArray();
-            if (!empty($userBookings)) {
-                // Fetch rooms that are not booked by this user
-                $rooms = Room::whereNotIn('id', $userBookings)->get();
-            } else {
-                // Fetch all rooms if the user has no bookings
-                $rooms = Room::all();
-            }
-        } else {
-            // If the user is not authenticated, fetch all rooms
-            $rooms = Room::all();
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
+    
+        // Fetch all room IDs booked by the authenticated user
+        $bookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
+    
+        // Fetch rooms not booked by the current user
+        $rooms = Room::whereNotIn('id', $bookedRoomIds)->get();
     
         return view('home.rooms', compact('rooms'));
     }
-    
     
     // Display a listing of all rooms in the admin dashboard
     public function adminIndex()
@@ -115,7 +112,7 @@ class RoomController extends Controller
     }
     
     // Show the confirmation for deleting a room
-    public function confirmDelete($id)
+    public function confirm($id)
     {
         $room = Room::findOrFail($id);
         return view('admin.delete_room', compact('room')); // Confirm delete view

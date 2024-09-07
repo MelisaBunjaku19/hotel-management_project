@@ -28,15 +28,16 @@
 
     
 
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="icon-chart"></i>Users
-            </a>
-            <div class="dropdown-menu" aria-labelledby="reportsDropdown">
-                <a class="dropdown-item" href="#">Show Users</a>
-                <a class="dropdown-item" href="#">Add Users</a>
-            </div>
-        </li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="icon-user"></i> Users
+    </a>
+    <div class="dropdown-menu" aria-labelledby="usersDropdown">
+        <a class="dropdown-item" href="{{ route('admin.show_users') }}">Show Users</a>
+        <a class="dropdown-item" href="{{ route('admin.add_user') }}">Add User</a>
+    </div>
+</li>
+
 
         <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

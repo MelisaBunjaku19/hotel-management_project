@@ -6,16 +6,38 @@ use App\Models\Blog;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\ElasticsearchService;
 
 class BlogController extends Controller
 {
-    // Display a listing of all blogs on the home page
-    public function index()
+    protected $elasticsearch;
+
+    public function __construct(ElasticsearchService $elasticsearch)
     {
-        $blogs = Blog::all();
-        return view('home.blog', compact('blogs'));
+        $this->elasticsearch = $elasticsearch;
     }
 
+  
+    
+        public function index()
+        {
+            $searchQuery = request()->input('searchQuery', '');
+    
+            if ($searchQuery) {
+                // Perform the search query
+                $results = $this->elasticsearch->search('blogs', $searchQuery);
+                $blogs = collect($results['hits']['hits'])->map(function ($hit) {
+                    return $hit['_source'];
+                });
+            } else {
+                $blogs = Blog::all();
+            }
+    
+            return view('home.blog', compact('blogs'));
+        }
+    
+    
+    
     // Show the details of a single blog post
     public function show($id)
     {
@@ -29,15 +51,15 @@ class BlogController extends Controller
         $request->validate([
             'comment' => 'required|string|max:255',
         ]);
-    
+
         $blog = Blog::findOrFail($blogId);
-    
+
         $comment = new Comment();
         $comment->content = $request->input('comment');
         $comment->blog_id = $blog->id;
         $comment->user_id = auth()->id(); // Assuming the user is logged in
         $comment->save();
-    
+
         return redirect()->route('home.blog_details', $blog->id)->with('success', 'Comment added successfully!');
     }
 
@@ -46,13 +68,14 @@ class BlogController extends Controller
         $blogs = Blog::all(); // Fetch all blog posts for admin
         return view('admin.show_blogs', compact('blogs'));
     }
-    
+
     // Show the form to edit a blog post
     public function edit($id)
     {
         $blog = Blog::findOrFail($id); // Fetch the blog by ID or fail if not found
         return view('admin.edit_show', compact('blog')); // Return the edit view with the blog data
     }
+
     public function update(Request $request, $id)
     {
         // Validate the request
@@ -62,15 +85,15 @@ class BlogController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validate image file
             'excerpt' => 'required|string|max:255',
         ]);
-    
+
         // Find the blog post by ID
         $blog = Blog::findOrFail($id);
-    
+
         // Update the blog post fields
         $blog->title = $request->input('title');
         $blog->content = $request->input('content');
         $blog->excerpt = $request->input('excerpt');
-    
+
         // Check if a new image has been uploaded
         if ($request->hasFile('image')) {
             // Delete old image if it exists
@@ -84,22 +107,21 @@ class BlogController extends Controller
             $image->move(public_path('images'), $imageName);
             $blog->image = $imageName;
         }
-    
+
         // Save the updated blog post
         $blog->save();
-    
+
         // Redirect back to the blog list with a success message
         return redirect()->route('admin.show_blogs')->with('success', 'Blog updated successfully.');
     }
-    
-    
+
     // Show the confirmation for deleting a blog post
     public function confirmDelete($id)
     {
         $blog = Blog::findOrFail($id);
         return view('admin.delete_show', compact('blog'));
     }
-    
+
     // Delete a blog post
     public function destroy($id)
     {
@@ -107,10 +129,12 @@ class BlogController extends Controller
         $blog->delete();
         return redirect()->route('admin.show_blogs')->with('success', 'Blog deleted successfully.');
     }
+
     public function create()
     {
         return view('admin.add_blog'); // Make sure this view file exists
     }
+
     public function store(Request $request)
     {
         // Validate the request data
@@ -120,13 +144,13 @@ class BlogController extends Controller
             'content' => 'required|string',
             'excerpt' => 'required|string',
         ]);
-    
+
         // Create a new blog instance
         $blog = new Blog();
         $blog->title = $request->input('title');
         $blog->content = $request->input('content');
         $blog->excerpt = $request->input('excerpt');
-    
+
         // Handle the image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -134,13 +158,10 @@ class BlogController extends Controller
             $image->move(public_path('images'), $filename);
             $blog->image = $filename;
         }
-    
+
         // Save the blog
         $blog->save();
-    
+
         return redirect()->route('admin.show_blogs')->with('success', 'Blog created successfully!');
     }
-    
-    
-    
 }

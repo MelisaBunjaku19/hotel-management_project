@@ -128,8 +128,8 @@
                                 <div class="form-group">
                                     <label for="wifi">WiFi Availability</label>
                                     <select id="wifi" name="wifi" class="form-control" required>
-                                        <option value="1" {{ old('wifi') == '1' ? 'selected' : '' }}>Yes</option>
-                                        <option value="0" {{ old('wifi') == '0' ? 'selected' : '' }}>No</option>
+                                        <option value="1" {{ old('wifi') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                        <option value="0" {{ old('wifi') == 'No' ? 'selected' : '' }}>No</option>
                                     </select>
                                 </div>
 

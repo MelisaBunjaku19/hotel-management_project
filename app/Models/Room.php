@@ -23,8 +23,5 @@ class Room extends Model
     ];
 
     // Define the relationship between Room and Booking
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+  
 }

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png">
     <style>
         body {
             background-color: #f7f7f7;
@@ -66,13 +66,14 @@
         .room_card .btn-primary:hover {
             background-color: #c9302c;
         }
-        
+
         .header {
             background: #333;
             color: #fff;
             padding: 15px 0;
             border-bottom: 2px solid #444;
         }
+
         .footer {
             background: #333;
             color: #f5f5f5;
@@ -81,17 +82,33 @@
             border-top: 2px solid #444;
         }
 
-        .btn-cancel {
-            background-color: #dc3545;
-            border: none;
-            color: #fff;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .btn-cancel:hover {
-            background-color: #c82333;
-        }
+        .btn-book-room {
+    background-color: #d9534f; /* Primary button color */
+    color: #fff; /* Ensure text stays white */
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    text-decoration: none; /* Remove underline */
+}
+
+.btn-book-room:hover {
+    background-color: #c9302c; /* Darker shade for hover */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: #fff; /* Keep text white on hover */
+}
+
+.btn-book-room:active {
+    background-color: #b52d29; /* Slightly darker on click */
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff; /* Keep text white */
+}
+
     </style>
 </head>
 <body>
@@ -109,25 +126,28 @@
             </div>
         </div>
         <div class="row">
-            @forelse($rooms as $room)
-            <div class="col-md-4 col-sm-6 mb-4">
-                <div class="room_card card">
-                    <img src="{{ asset('images/' . $room->image) }}" alt="{{ $room->room_title }}" class="card-img-top room_img">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $room->room_title }}</h5>
-                        <p class="card-text">{{ Str::limit($room->description, 100) }}</p>
-                        <p class="card-text"><strong>Price:</strong> ${{ number_format($room->price, 2) }}</p>
-                        <p class="card-text"><strong>Wi-Fi:</strong> {{ $room->wifi }}</p>
-                        <p class="card-text"><strong>Room Type:</strong> {{ $room->room_type }}</p>
-                        <!-- Booking Link -->
-                        <a href="{{ route('payment.page', $room->id) }}" class="btn btn-primary">Book Room</a>
+            @forelse ($rooms as $room)
+                <div class="col-md-4 mb-4">
+                    <div class="room_card">
+                        @if ($room->image)
+                            <img src="{{ asset('images/' . $room->image) }}" class="card-img-top" alt="{{ $room->room_title }}">
+                        @else
+                            <img src="{{ asset('images/default-room.jpg') }}" class="card-img-top" alt="Default Room Image">
+                        @endif
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $room->room_title }}</h5>
+                            <p class="card-text">{{ $room->description }}</p>
+                            <p class="card-text">Price: ${{ $room->price }}</p>
+                            <p class="card-text">Type: {{ $room->room_type }}</p>
+                            <p class="card-text">Wi-Fi: {{ $room->wifi ? 'Yes' : 'No' }}</p>
+                            <a href="{{ route('payment.page', $room->id) }}" class="btn-book-room">Book Now</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             @empty
-            <div class="col-12">
-                <p>No rooms available at the moment.</p>
-            </div>
+                <div class="col-12">
+                    <p>No rooms available at the moment.</p>
+                </div>
             @endforelse
         </div>
     </div>

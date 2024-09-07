@@ -9,6 +9,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\LocaleController;
 use App\Models\Room;
+use App\Http\Controllers\MongoDBTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ use App\Models\Room;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', [AdminController::class, 'home']);
+Route::get('/', [AdminController::class, 'index'])->name('home');
+
 
 Route::get('/home', [AdminController::class, 'index'])->name('home');
 Route::get('profile', [AdminController::class, 'profile'])->name('admin.profile');
@@ -135,23 +137,59 @@ Route::get('/add_room/create', [RoomController::class, 'create'])->name('admin.a
 Route::post('/add_room/store', [RoomController::class, 'store'])->name('admin.store_room');
 
 
-Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index'); // Show user's booked rooms
+Route::get('/bookings', [BookingController::class, 'showBookings'])->name('home.bookings');
 Route::get('/bookings/{id}/payment', [BookingController::class, 'showPaymentPage'])->name('bookings.payment'); // Payment page
-Route::post('/bookings/{id}/process', [BookingController::class, 'processPayment'])->name('bookings.process'); // Process payment and book the room
+// Process payment and book the room
 
 // In web.php
 
-Route::get('/payment/{id}', [BookingController::class, 'showPaymentPage'])->name('payment.page');
-Route::post('/payment/process', [BookingController::class, 'processPayment'])->name('process.payment');
-Route::get('/payment-success', [BookingController::class, 'handleSuccess'])->name('payment.success');
 
 Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
 
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-Route::get('/payment-success', function () {
-    return view('payment.success'); // Create a view to show payment success message
-})->name('payment.success');
 
-Route::get('/payment-cancel', function () {
-    return view('payment.cancel'); // Create a view to show payment cancel message
-})->name('payment.cancel');
+// Route to show payment page for a specific booking
+Route::get('/payment/{id}', [BookingController::class, 'showPaymentPage'])->name('payment.page');
+
+// Route to create Stripe Checkout session
+Route::post('/create-checkout-session', [BookingController::class, 'createCheckoutSession'])->name('create.checkout.session');
+
+// Route to handle successful payment
+Route::get('/payment-success', [BookingController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment-cancel', [BookingController::class, 'paymentCancel'])->name('payment.cancel');
+
+
+
+
+Route::post('/bookings/cancel', [BookingController::class, 'cancelBooking'])->name('bookings.cancel');
+// Show Users
+Route::get('show_users', [AdminController::class, 'showUsers'])->name('admin.show_users');
+
+// Route to show the form to add a new user
+Route::get('add_user/add', [AdminController::class, 'addUser'])->name('admin.add_user');
+
+// Route to store a new user
+Route::post('add_user/store', [AdminController::class, 'storeUser'])->name('admin.store_user');
+
+// Route to show the form to edit a user
+
+// Route to update a user
+// Route to show the form to edit a user
+Route::get('edit_user/{id}', [AdminController::class, 'editUser'])->name('admin.edit_user');
+
+// Route to update a user
+Route::put('edit_user/{id}', [AdminController::class, 'updateUser'])->name('admin.update_user');
+
+// Route to show confirmation for deleting a user
+Route::get('delete_user/{id}', [AdminController::class, 'confirmDeleteUser'])->name('admin.confirm_delete_user');
+
+// Route to delete a user
+Route::delete('delete_user/{id}', [AdminController::class, 'deleteUser'])->name('admin.delete_user');
+// Edit user form
+//Route::get('/admin/users/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit_user');
+
+// Update user
+//Route::put('/admin/users/update/{id}', [AdminController::class, 'update'])->name('admin.update_user');
+
+// Delete user
+//Route::delete('show_users/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete_user');
