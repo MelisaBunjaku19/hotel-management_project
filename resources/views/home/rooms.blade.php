@@ -1,3 +1,4 @@
+<!-- resources/views/home/rooms.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,7 @@
         body {
             background-color: #f7f7f7;
             color: #333;
+            font-family: 'Poppins', sans-serif;
         }
 
         .rooms .titlepage h2 {
@@ -37,6 +39,7 @@
             border-radius: 15px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
 
         .room_card:hover {
@@ -56,15 +59,19 @@
 
         .room_card .card-body {
             color: #333;
+            padding: 20px;
         }
 
-        .room_card .btn-primary {
-            background-color: #d9534f;
-            border: none;
+        .room_card .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        .room_card .btn-primary:hover {
-            background-color: #c9302c;
+        .room_card .card-text {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
         }
 
         .header {
@@ -83,32 +90,40 @@
         }
 
         .btn-book-room {
-    background-color: #d9534f; /* Primary button color */
-    color: #fff; /* Ensure text stays white */
-    padding: 10px 20px;
-    border-radius: 30px;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    text-align: center;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-    text-decoration: none; /* Remove underline */
-}
+            background-color: #28a745; /* Changed to a green color for "Available" */
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            text-decoration: none; /* Remove underline */
+        }
 
-.btn-book-room:hover {
-    background-color: #c9302c; /* Darker shade for hover */
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    color: #fff; /* Keep text white on hover */
-}
+        .btn-book-room:hover {
+            background-color: #218838; /* Darker green on hover */
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.btn-book-room:active {
-    background-color: #b52d29; /* Slightly darker on click */
-    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
-    color: #fff; /* Keep text white */
-}
+        .badge-booked {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #dc3545; /* Red badge for booked rooms */
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
 
+        .badge-booked-user {
+            background-color: #17a2b8; /* Blue badge for user's own bookings */
+        }
     </style>
 </head>
 <body>
@@ -134,19 +149,39 @@
                         @else
                             <img src="{{ asset('images/default-room.jpg') }}" class="card-img-top" alt="Default Room Image">
                         @endif
+
+                        @if(in_array($room->id, $bookedRoomIds))
+                            @if(in_array($room->id, $userBookedRoomIds))
+                                <span class="badge-booked badge-booked-user">Booked by You</span>
+                            @else
+                                <span class="badge-booked">Booked</span>
+                            @endif
+                        @endif
+
                         <div class="card-body">
                             <h5 class="card-title">{{ $room->room_title }}</h5>
                             <p class="card-text">{{ $room->description }}</p>
-                            <p class="card-text">Price: ${{ $room->price }}</p>
-                            <p class="card-text">Type: {{ $room->room_type }}</p>
-                            <p class="card-text">Wi-Fi: {{ $room->wifi ? 'Yes' : 'No' }}</p>
-                            <a href="{{ route('payment.page', $room->id) }}" class="btn-book-room">Book Now</a>
+                            <p class="card-text"><strong>Price:</strong> ${{ number_format($room->price, 2) }}</p>
+                            <p class="card-text"><strong>Type:</strong> {{ $room->room_type }}</p>
+                            <p class="card-text"><strong>Wi-Fi:</strong> {{ $room->wifi ? 'Yes' : 'No' }}</p>
+                            @if(in_array($room->id, $bookedRoomIds))
+                                @if(in_array($room->id, $userBookedRoomIds))
+                                    <!-- Optionally, allow users to manage their own bookings -->
+                                    <a href="{{ route('bookings.index', $room->id) }}" class="btn btn-info w-100">Manage Booking</a>
+                                @else
+                                    <button class="btn btn-secondary w-100" disabled>Unavailable</button>
+                                @endif
+                            @else
+                                <a href="{{ route('payment.page', $room->id) }}" class="btn-book-room">Book Now</a>
+                            @endif
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
-                    <p>No rooms available at the moment.</p>
+                    <div class="alert alert-info text-center">
+                        No available rooms at the moment. Please check back later.
+                    </div>
                 </div>
             @endforelse
         </div>
@@ -157,6 +192,8 @@
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+<!-- FontAwesome for icons (optional) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

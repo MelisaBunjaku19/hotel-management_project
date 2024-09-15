@@ -78,6 +78,11 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                @error('category_id')
+                                    <div class="alert alert-danger">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
 
                                 <!-- Title Field -->
                                 <div class="form-group">
@@ -87,9 +92,10 @@
 
                                 <!-- Image Field -->
                                 <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" id="image" name="image" class="form-control-file">
-    </div>
+                                    <label for="image">Image</label>
+                                    <input type="file" id="image" name="image" class="form-control-file">
+                                </div>
+
                                 <!-- Content Field -->
                                 <div class="form-group">
                                     <label for="content">Content</label>
@@ -100,6 +106,19 @@
                                 <div class="form-group">
                                     <label for="excerpt">Excerpt</label>
                                     <textarea id="excerpt" name="excerpt" class="form-control" rows="2" placeholder="Enter Blog Excerpt" required>{{ old('excerpt') }}</textarea>
+                                </div>
+
+                                <!-- Category Field -->
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select id="category" name="category_id" class="form-control" required>
+                                        <option value="">Select Category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Create Blog</button>

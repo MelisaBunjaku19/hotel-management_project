@@ -29,7 +29,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('admin/img/favicon.ico') }}">
-    </head>
+</head>
+
 <body style="background-color: #121417; color: #ccc;">
     <div class="container" style="padding: 30px 0;">
         <div class="page-header">
@@ -45,7 +46,34 @@
             </a>
         </div>
 
+        <!-- Filter and Sorting Form -->
         <section class="no-padding-bottom">
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <form method="GET" action="{{ route('admin.show_users') }}">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <select name="role" class="form-control">
+                                    <option value="">All Roles</option>
+                                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <select name="sortOrder" class="form-control">
+                                    <option value="asc" {{ request('sortOrder') == 'asc' ? 'selected' : '' }}>Sort by Name (A-Z)</option>
+                                    <option value="desc" {{ request('sortOrder') == 'desc' ? 'selected' : '' }}>Sort by Name (Z-A)</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <button type="submit" class="btn btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- User Table -->
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-12">
                     <div class="block">
@@ -61,7 +89,7 @@
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Phone</th> <!-- Added Phone column -->
+                                            <th>Phone</th>
                                             <th>Role</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
@@ -73,7 +101,7 @@
                                                 <td>{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->phone }}</td> <!-- Display Phone number -->
+                                                <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->usertype }}</td>
                                                 <td>
                                                     @if($user->created_at)
@@ -96,6 +124,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+
+                                <!-- Pagination Links -->
+                                {{ $users->links() }}
                             </div>
                         </div>
                     </div>

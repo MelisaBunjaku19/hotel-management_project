@@ -46,6 +46,31 @@
             </a>
         </div>
 
+        <!-- Sorting Form -->
+        <form method="GET" action="{{ route('admin.index_room') }}" class="mb-3">
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <select name="sort" class="form-control">
+                        <option value="id" {{ $sortField === 'id' ? 'selected' : '' }}>ID</option>
+                        <option value="room_title" {{ $sortField === 'room_title' ? 'selected' : '' }}>Room Title</option>
+                        <option value="price" {{ $sortField === 'price' ? 'selected' : '' }}>Price</option>
+                        <option value="room_type" {{ $sortField === 'room_type' ? 'selected' : '' }}>Room Type</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select name="direction" class="form-control">
+                        <option value="asc" {{ $sortDirection === 'asc' ? 'selected' : '' }}>Ascending</option>
+                        <option value="desc" {{ $sortDirection === 'desc' ? 'selected' : '' }}>Descending</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Sort</button>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('admin.index_room') }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
 
         <section class="no-padding-bottom">
             <div class="row justify-content-center">
@@ -79,14 +104,12 @@
                                                     <td>{{ $room->id }}</td>
                                                     <td>{{ $room->room_title }}</td>
                                                     <td><img src="{{ asset('images/' . $room->image) }}" alt="Room Image" width="100"></td>
-
                                                     <td>{{ Str::limit($room->description, 50) }}</td>
                                                     <td>${{ $room->price }}</td>
                                                     <td>{{ $room->room_type }}</td>
                                                     <td>{{ $room->wifi ? 'Yes' : 'No' }}</td>
                                                     <td>
                                                         <div class="d-flex">
-                                                         
                                                             <a href="{{ route('admin.edit_room', $room->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
                                                             <form action="{{ route('admin.delete_room', $room->id) }}" method="POST" style="display:inline;">
                                                                 @csrf

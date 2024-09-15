@@ -22,6 +22,18 @@ class BookingController extends Controller
         return view('home.rooms', compact('rooms'));
     }
 
+    public function adminIndex(Request $request)
+    {
+        $sortField = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $bookings = Booking::with(['room', 'user'])
+                            ->orderBy($sortField, $sortDirection)
+                            ->get();
+
+        return view('admin.show_bookings', compact('bookings', 'sortField', 'sortDirection'));
+    }
+
     public function index()
     {
         $bookings = Booking::where('user_id', auth()->id())
@@ -31,6 +43,39 @@ class BookingController extends Controller
         return view('home.bookings', compact('bookings'));
     }
     
+    // BookingController.php
+
+    public function bookRoom(Request $request)
+    {
+        $roomId = $request->input('room_id');
+        $room = Room::findOrFail($roomId);
+    
+        // Check if the room is already booked
+        if ($room->is_booked) {
+            return response()->json(['error' => 'Room is already booked.'], 400);
+        }
+    
+        // Proceed with booking logic
+        $room->is_booked = true;
+        $room->save();
+    
+        // Optionally, you can create a booking record here if needed
+        // For example:
+        // Booking::create([
+        //     'user_id' => auth()->id(),
+        //     'room_id' => $roomId,
+        //     'arrival_date' => $request->input('arrival_date'),
+        //     'departure_date' => $request->input('departure_date'),
+        //     // Add other necessary booking details
+        // ]);
+    
+        // Handle payment and booking confirmation here
+        // For example, initiate a payment process or redirect to a payment gateway
+    
+        return response()->json(['success' => 'Booking confirmed.']);
+    }
+    
+
 
     public function showPaymentPage($id)
     {
@@ -40,18 +85,14 @@ class BookingController extends Controller
 
     public function createCheckoutSession(Request $request)
     {
-        // Validate the request data
         $validatedData = $request->validate([
             'room_id' => 'required|integer|exists:rooms,id',
             'arrival_date' => 'required|date',
             'departure_date' => 'required|date|after_or_equal:arrival_date',
         ]);
     
-        // Fetch the room using the validated room ID
         $room = Room::findOrFail($validatedData['room_id']);
-    
-        // Calculate the amount or other necessary values for the checkout session
-        $amount = $room->price * 100; // Convert to cents for Stripe
+        $amount = $room->price * 100; // Amount in cents
     
         Stripe::setApiKey(env('STRIPE_SECRET'));
     
@@ -85,11 +126,12 @@ class BookingController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 
     public function paymentSuccess(Request $request)
     {
         $sessionId = $request->query('session_id');
-    
+        
         try {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
     
@@ -115,11 +157,18 @@ class BookingController extends Controller
             $booking->departure_date = $session->metadata->departure_date;
             $booking->save();
     
-            return redirect()->route('bookings.index');
+            // Pass the payment and booking details to the view
+            return view('home.payment-success', [
+                'room' => $room,
+                'amountPaid' => $booking->amount_paid,
+                'arrivalDate' => $booking->arrival_date,
+                'departureDate' => $booking->departure_date
+            ]);
         } catch (\Exception $e) {
             return redirect()->route('payment.cancel')->with('message', 'There was an error processing your payment.');
         }
     }
+    
     
     public function paymentCancel()
     {
@@ -129,26 +178,31 @@ class BookingController extends Controller
     }
 
     public function cancelBooking(Request $request)
-{
-    // Validate the booking ID
-    $validatedData = $request->validate([
-        'booking_id' => 'required|integer|exists:bookings,id',
-    ]);
-
-    // Find the booking by ID and check if it belongs to the authenticated user
-    $booking = Booking::where('id', $validatedData['booking_id'])
-                      ->where('user_id', auth()->id())
-                      ->first();
-
-    if (!$booking) {
-        return redirect()->route('bookings.index')->with('error', 'Booking not found.');
+    {
+        // Validate the booking ID
+        $validatedData = $request->validate([
+            'booking_id' => 'required|integer|exists:bookings,id',
+        ]);
+    
+        // Find the booking by ID and check if it belongs to the authenticated user
+        $booking = Booking::where('id', $validatedData['booking_id'])
+                          ->where('user_id', auth()->id())
+                          ->first();
+    
+        if (!$booking) {
+            return redirect()->route('bookings.index')->with('error', 'Booking not found.');
+        }
+    
+        // Mark the room as available (assuming you have an 'is_available' field in the rooms table)
+        $room = $booking->room;
+        $room->is_available = true;
+        $room->save();
+    
+        // Delete the booking
+        $booking->delete();
+    
+        // Redirect with a success message
+        return redirect()->route('rooms.index')->with('success', 'Booking has been canceled successfully.');
     }
-
-    // Delete the booking
-    $booking->delete();
-
-    // Redirect with a success message
-    return redirect()->route('bookings.index')->with('success', 'Booking has been canceled successfully.');
-}
-
+    
 }

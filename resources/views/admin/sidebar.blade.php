@@ -2,113 +2,102 @@
     <!-- Sidebar Navigation Menus -->
     <span class="heading">Main</span>
     <ul class="list-unstyled">
-        <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-        <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-windows"></i>Hotel Rooms
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    <a class="dropdown-item" href="{{ route('admin.add_room') }}">Add Room</a>
-    <a class="dropdown-item" href="{{ route('admin.index_room') }}">Show Rooms</a>
-</div>
-
-</li>
-
-        
-        <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-bookmark"></i>Bookings
-    </a>
-    <div class="dropdown-menu" aria-labelledby="bookingsDropdown">
-        <a class="dropdown-item" href="">Show Bookings</a>
-        <a class="dropdown-item" href="">Add Booking</a>
-    </div>
-</li>
-
-
-    
-
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-user"></i> Users
-    </a>
-    <div class="dropdown-menu" aria-labelledby="usersDropdown">
-        <a class="dropdown-item" href="{{ route('admin.show_users') }}">Show Users</a>
-        <a class="dropdown-item" href="{{ route('admin.add_user') }}">Add User</a>
-    </div>
-</li>
-
-
-        <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-settings"></i>Settings
-    </a>
-    <div class="dropdown-menu" aria-labelledby="settingsDropdown">
-        <a class="dropdown-item" href="{{ route('admin.general') }}">General Settings</a>
-      
-    </div>
-</li>
-
-
-            <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="icon-windows"></i>Blogs
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    <a class="dropdown-item" href="{{ route('admin.add_blog') }}">Add Blog</a>
-    <a class="dropdown-item" href="{{ route('admin.show_blogs') }}">Show Blogs</a>
-</div>
-
-</li>
-
-
-
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="tasksDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="icon-tasks"></i>Tasks
+        <li class="active">
+            <a href="index.html"> 
+                <i class="fas fa-home"></i> Home 
             </a>
-            <div class="dropdown-menu" aria-labelledby="tasksDropdown">
-                <a class="dropdown-item" href="#">
-                    <span class="badge badge-success mr-2"></span> Done
+        </li>
+
+        <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="hotelRoomsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bed"></i> Hotel Rooms
+    </a>
+    <div class="dropdown-menu" aria-labelledby="hotelRoomsDropdown">
+        <a class="dropdown-item" href="{{ route('admin.add_room') }}">
+            <i class="fas fa-plus"></i> Add Room
+        </a>
+        <a class="dropdown-item" href="{{ route('admin.index_room') }}">
+            <i class="fas fa-list"></i> Show Rooms
+        </a>
+        <a class="dropdown-item" href="{{ route('admin.room_availability') }}">
+            <i class="fas fa-calendar-check"></i> Room Availability
+        </a>
+    </div>
+</li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-calendar-check"></i> Bookings
+            </a>
+            <div class="dropdown-menu" aria-labelledby="bookingsDropdown">
+                <a class="dropdown-item" href="{{ route('admin.show_bookings') }}">
+                    <i class="fas fa-list"></i> Show Bookings
                 </a>
-                <a class="dropdown-item" href="#">
-                    <span class="badge badge-warning mr-2"></span> In Progress
+              
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                <a class="dropdown-item" href="{{ route('admin.show_users') }}">
+                    <i class="fas fa-list"></i> Show Users
                 </a>
-                <a class="dropdown-item" href="#">
-                    <span class="badge badge-primary mr-2"></span> Started
-                </a>
-                <a class="dropdown-item" href="#">
-                    <span class="badge badge-secondary mr-2"></span> Pending
+                <a class="dropdown-item" href="{{ route('admin.add_user') }}">
+                    <i class="fas fa-plus"></i> Add User
                 </a>
             </div>
         </li>
-      
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-cogs"></i> Settings
+            </a>
+            <div class="dropdown-menu" aria-labelledby="settingsDropdown">
+                <a class="dropdown-item" href="{{ route('admin.general') }}">
+                    <i class="fas fa-cog"></i> General Settings
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="blogsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-blog"></i> Blogs
+            </a>
+            <div class="dropdown-menu" aria-labelledby="blogsDropdown">
+                <a class="dropdown-item" href="{{ route('admin.add_blog') }}">
+                    <i class="fas fa-plus"></i> Add Blog
+                </a>
+                <a class="dropdown-item" href="{{ route('admin.show_blogs') }}">
+                    <i class="fas fa-list"></i> Show Blogs
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="tasksDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-tasks"></i> Tasks
+    </a>
+    <div class="dropdown-menu" aria-labelledby="tasksDropdown">
+        <!-- Link to create a new task -->
+        <a class="dropdown-item" href="{{ route('admin.create') }}">
+            <i class="fas fa-plus"></i> Add Task
+        </a>
+        <!-- Link to show all tasks -->
+        <a class="dropdown-item" href="{{ route('admin.tasks') }}">
+            <i class="fas fa-list"></i> Show All Tasks
+        </a>
+    </div>
+</li>
+
+
+
+</li>
+
+
     </ul>
 </nav>
-<style>
-    .badge {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: currentColor;
-        vertical-align: middle;
-        margin-right: 5px;
-    }
 
-    .badge-success {
-        color: #28a745; /* Green */
-    }
-
-    .badge-warning {
-        color: #ffc107; /* Yellow */
-    }
-
-    .badge-primary {
-        color: #007bff; /* Blue */
-    }
-
-    .badge-secondary {
-        color: #6c757d; /* Grey */
-    }
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

@@ -4,33 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Booking;
-
 use Illuminate\Http\Request;
-
 
 class RoomController extends Controller
 {
     public function index()
     {
-        // Check if the user is authenticated
-        if (!auth()->check()) {
-            return redirect()->route('login');
-        }
-    
-        // Fetch all room IDs booked by the authenticated user
-        $bookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
-    
-        // Fetch rooms not booked by the current user
-        $rooms = Room::whereNotIn('id', $bookedRoomIds)->get();
-    
-        return view('home.rooms', compact('rooms'));
-    }
-    
-    // Display a listing of all rooms in the admin dashboard
-    public function adminIndex()
-    {
+        // Fetch all rooms
         $rooms = Room::all();
-        return view('admin.index_room', compact('rooms'));
+    
+        // Fetch the booked rooms by querying the bookings table
+        $bookedRoomIds = Booking::pluck('room_id')->toArray(); // Assuming the 'room_id' field exists in your 'bookings' table
+    
+        // Fetch the rooms booked by the logged-in user
+        $userBookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
+    
+        // Return the view and pass the necessary data
+        return view('home.rooms', compact('rooms', 'bookedRoomIds', 'userBookedRoomIds'));
+    }
+
+    // Display a listing of all rooms in the admin dashboard
+    public function adminIndex(Request $request)
+    {
+        $sortField = $request->input('sort', 'id'); // Default to sorting by ID
+        $sortDirection = $request->input('direction', 'asc'); // Default to ascending order
+
+        // Validate sort field and direction
+        $validSortFields = ['id', 'room_title', 'price', 'room_type'];
+        if (!in_array($sortField, $validSortFields)) {
+            $sortField = 'id'; // Default to ID if invalid field
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc'; // Default to ascending if invalid direction
+        }
+
+        // Fetch and sort rooms
+        $rooms = Room::orderBy($sortField, $sortDirection)->get();
+
+        return view('admin.index_room', compact('rooms', 'sortField', 'sortDirection'));
     }
 
     // Show the form to create a new room
@@ -110,7 +121,7 @@ class RoomController extends Controller
     
         return redirect()->route('admin.index_room')->with('success', 'Room updated successfully!');
     }
-    
+
     // Show the confirmation for deleting a room
     public function confirm($id)
     {
@@ -126,5 +137,22 @@ class RoomController extends Controller
 
         return redirect()->route('admin.index_room')->with('success', 'Room deleted successfully.');
     }
-}
 
+    // Display a listing of all rooms in the admin dashboard
+    public function showAvailability()
+    {
+        // Fetch all rooms
+        $rooms = Room::all();
+
+        // Fetch the booked room IDs
+        $bookedRoomIds = Booking::pluck('room_id')->toArray();
+
+        // Determine availability for each room
+        foreach ($rooms as $room) {
+            $room->is_available = !in_array($room->id, $bookedRoomIds);
+        }
+
+        // Pass the data to the view
+        return view('admin.room_availability', compact('rooms', 'bookedRoomIds'));
+    }
+}

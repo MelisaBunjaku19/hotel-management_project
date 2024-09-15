@@ -55,11 +55,12 @@
         margin-top: 20px;
     }
 
-    .about .titlepage a:hover {
-        background: linear-gradient(45deg, #d84a59, #ff6f61); /* Reverse gradient on hover */
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Deeper shadow on hover */
-        transform: translateY(-3px); /* Slight lift on hover */
-    }
+    /* Removed hover effect */
+    /* .about .titlepage a:hover {
+        background: linear-gradient(45deg, #d84a59, #ff6f61); 
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        transform: translateY(-3px); 
+    } */
 
     .about .about_img img {
         width: 100%;
@@ -98,10 +99,11 @@
         z-index: 1;
     }
 
-    .about .more-info .info-item:hover {
-        transform: translateY(-10px); /* Lift effect on hover */
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
-    }
+    /* Removed hover effect */
+    /* .about .more-info .info-item:hover {
+        transform: translateY(-10px); 
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    } */
 
     .about .more-info h3 {
         font-size: 26px;
@@ -120,6 +122,7 @@
         margin-bottom: 20px;
     }
 
+   
     .about .more-info a.btn-primary {
         background-color: #ff6f61; /* Primary button color */
         border-color: #ff6f61;
@@ -128,15 +131,16 @@
         border-radius: 30px;
         font-size: 14px;
         text-transform: uppercase;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease; /* Smooth transition for background and transform */
         position: relative; /* For pseudo-element positioning */
         overflow: hidden; /* Ensure rounded corners apply to button */
     }
 
     .about .more-info a.btn-primary:hover {
         background-color: #d84a59; /* Darker color on hover */
+        transform: scale(1.05); /* Slight zoom on hover */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
     }
-
     .header {
         background: #333; /* Dark gray background */
         color: white; /* Light gray text */
@@ -152,6 +156,7 @@
         border-top: 2px solid #444; /* Slightly lighter gray border */
     }
 </style>
+
 
 </head>
 <body>
@@ -187,11 +192,8 @@
                 <h3>Advanced Reporting and Analytics</h3>
                 <p>Gain valuable insights into your hotel’s operations with our advanced reporting and analytics features. Track performance metrics, analyze trends, and make data-driven decisions to optimize your hotel management.</p>
             </div>
-            <div class="info-item">
-                <h3>Explore Our Blog</h3>
-                <p>Stay updated with the latest trends in hotel management, travel tips, and more by following our blog. Our experts share insights and advice to help you make the most of your hotel stay or business.</p>
-                <a href="{{ route('blog.index') }}" class="btn btn-primary">Visit Our Blog</a>
-            </div>
+  
+
         </div>
     </div>
 </div>
@@ -204,7 +206,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         const readMoreBtn = document.getElementById('readMoreBtn');
         const moreInfoSection = document.getElementById('moreInfoSection');
+        const visitBlogBtn = document.querySelector('.info-item a.btn-primary');
 
+        // Toggle more info section visibility
         readMoreBtn.addEventListener('click', function() {
             if (moreInfoSection.style.display === 'block') {
                 moreInfoSection.style.display = 'none';
@@ -213,6 +217,15 @@
                 moreInfoSection.style.display = 'block';
                 readMoreBtn.textContent = 'Read Less';
             }
+        });
+
+        // Handle the visit blog button click
+        visitBlogBtn.addEventListener('click', function(event) {
+            // Optional: Add any animations or conditions here before redirecting
+            // For example, show a loading spinner or perform an AJAX request
+
+            // Redirect to the blog index page
+            window.location.href = "{{ route('blog.index') }}";
         });
     });
 </script>

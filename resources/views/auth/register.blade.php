@@ -27,8 +27,8 @@
             <div class="mt-4">
                 <x-label for="phone" value="{{ __('Phone') }}" class="text-red-500" />
                 <div class="relative">
-                    <input id="phone" class="block mt-1 w-full bg-black text-white border-red-500 focus:border-red-500 focus:ring focus:ring-red-500 focus:ring-opacity-50 rounded-md shadow-sm" 
-                           type="tel" name="phone" :value="old('phone')" required autocomplete="phone" />
+                    <x-input id="phone" class="block mt-1 w-full bg-black text-white border-red-500 focus:border-red-500 focus:ring focus:ring-red-500 focus:ring-opacity-50 rounded-md shadow-sm" 
+                             type="tel" name="phone" :value="old('phone')" required autocomplete="phone" />
                 </div>
             </div>
 
@@ -140,5 +140,36 @@
         font-weight: 700;
         margin-bottom: 20px;
         text-transform: uppercase;
+    }
+
+    .bg-black {
+        background-color: #000000; /* Ensure background color is black */
+    }
+
+    .text-white {
+        color: #ffffff; /* Ensure text color is white */
+    }
+
+    .border-red-500 {
+        border-color: #ef4444; /* Red border color */
+    }
+
+    .focus:border-red-500 {
+        --border-opacity: 1;
+        border-color: #ef4444;
+    }
+
+    .focus:ring-red-500 {
+        --ring-offset-shadow: 0 0 0 var(--ring-offset-width) var(--ring-offset-color);
+        --ring-shadow: 0 0 0 calc(1px + var(--ring-width)) var(--ring-color);
+        --ring-color: #ef4444;
+    }
+
+    input {
+        color: #ffffff; /* Ensure text color inside input fields is white */
+    }
+
+    .field-icon {
+        color: red;
     }
 </style>

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Elastic\Elasticsearch\ClientBuilder;
+use Illuminate\Support\Facades\Log; // Import Log class for logging errors
+use Exception; // Import Exception class
 
 class ElasticsearchService
 {
@@ -10,35 +12,47 @@ class ElasticsearchService
 
     public function __construct()
     {
-        // Ensure Elasticsearch ClientBuilder class exists
         if (!class_exists(ClientBuilder::class)) {
             throw new \Exception('Elasticsearch ClientBuilder class not found. Please check your Elasticsearch PHP client installation.');
         }
 
-        // Create and configure the client
         $this->client = ClientBuilder::create()
-        ->setHosts(['localhost:9200']) // Update this to your Elasticsearch host
+        ->setHosts([env('ELASTICSEARCH_HOST', 'localhost:9200')])
+        ->setBasicAuthentication(
+            env('ELASTICSEARCH_USER', 'elastic'), 
+            env('ELASTICSEARCH_PASSWORD', '12345678')
+        )
         ->build();
     
     }
 
-    // Example method to perform a search query
-    public function search($index, $query)
+    
+    public function search($query, $index = 'blogs', $from = 0, $size = 10)
     {
         $params = [
             'index' => $index,
-            'body' => [
+            'body'  => [
+                'from' => $from,
+                'size' => $size,
                 'query' => [
                     'bool' => [
                         'should' => [
                             [
-                                'prefix' => [
-                                    'title' => $query
+                                'wildcard' => [
+                                    'title' => [
+                                        'value' => strtolower($query) . '*', // For partial matching
+                                        'boost' => 1.0,
+                                        'rewrite' => 'constant_score'
+                                    ]
                                 ]
                             ],
                             [
-                                'match' => [
-                                    'content' => $query
+                                'wildcard' => [
+                                    'content' => [
+                                        'value' => strtolower($query) . '*', // For partial matching in content
+                                        'boost' => 0.5,
+                                        'rewrite' => 'constant_score'
+                                    ]
                                 ]
                             ]
                         ]
@@ -47,17 +61,17 @@ class ElasticsearchService
             ]
         ];
     
-        return $this->client->search($params);
-    }
+        try {
+            $response = $this->client->search($params);
     
-
-    // Example method to index a document
-    public function index($index, $id, $document)
-    {
-        return $this->client->index([
-            'index' => $index,
-            'id'    => $id,
-            'body'  => $document
-        ]);
+            if (isset($response['hits']['hits'])) {
+                return $response;
+            } else {
+                return ['hits' => ['hits' => []]];
+            }
+        } catch (Exception $e) {
+            Log::error('Elasticsearch search failed', ['error' => $e->getMessage()]);
+            throw new \Exception('Search query failed: ' . $e->getMessage());
+        }
     }
-}
+}    

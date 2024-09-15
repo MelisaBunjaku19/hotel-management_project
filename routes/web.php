@@ -10,6 +10,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\LocaleController;
 use App\Models\Room;
 use App\Http\Controllers\MongoDBTestController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -193,3 +194,22 @@ Route::delete('delete_user/{id}', [AdminController::class, 'deleteUser'])->name(
 
 // Delete user
 //Route::delete('show_users/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete_user');
+
+Route::get('/show_bookings', [BookingController::class, 'adminIndex'])
+    ->name('admin.show_bookings');
+
+// Route for displaying all tasks or tasks filtered by status
+// Route to show all tasks or filter tasks by status
+// Display all tasks with optional status filter
+Route::get('/tasks', [TaskController::class, 'index'])->name('admin.tasks');
+
+// Route to show the create task form
+Route::get('/tasks/create', [TaskController::class, 'create'])->name('admin.create');
+
+// Route to store a new task
+Route::post('/tasks', [TaskController::class, 'store'])->name('admin.store');
+
+
+
+// Add route for showing room availability
+Route::get('/room_availability', [RoomController::class, 'showAvailability'])->name('admin.room_availability');

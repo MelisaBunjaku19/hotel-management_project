@@ -59,11 +59,24 @@ class AdminController extends Controller
         return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
     }
 
-    public function showUsers()
+    public function showUsers(Request $request)
     {
-        $users = User::all(); // Fetch all users
+        // Fetch the role filter and sort order from the request
+        $roleFilter = $request->input('role', '');
+        $sortOrder = $request->input('sortOrder', 'asc'); // Default to ascending
+    
+        // Query to filter users by role and sort by username
+        $query = User::query();
+    
+        if ($roleFilter) {
+            $query->where('usertype', $roleFilter);
+        }
+    
+        $users = $query->orderBy('name', $sortOrder)->paginate(10); // Pagination with 10 users per page
+    
         return view('admin.show_users', compact('users'));
     }
+    
 
     // Show form to add a new user
     public function addUser()

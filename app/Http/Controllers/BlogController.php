@@ -3,48 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Services\ElasticsearchService;
 
 class BlogController extends Controller
 {
-    protected $elasticsearch;
-
-    public function __construct(ElasticsearchService $elasticsearch)
+    // Display all blogs with optional search and category filtering
+    public function index()
     {
-        $this->elasticsearch = $elasticsearch;
-    }
-
-  
+        $searchQuery = request()->input('searchQuery', '');
+        $categoryId = request()->input('category', '');
     
-        public function index()
-        {
-            $searchQuery = request()->input('searchQuery', '');
+        // Build the query based on search and category filters
+        $query = Blog::query();
     
-            if ($searchQuery) {
-                // Perform the search query
-                $results = $this->elasticsearch->search('blogs', $searchQuery);
-                $blogs = collect($results['hits']['hits'])->map(function ($hit) {
-                    return $hit['_source'];
-                });
-            } else {
-                $blogs = Blog::all();
-            }
-    
-            return view('home.blog', compact('blogs'));
+        if ($searchQuery) {
+            $query->where('title', 'LIKE', '%' . $searchQuery . '%');
         }
     
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
     
+        $blogs = $query->get();
+        $categories = Category::all();  // Fetch all categories for the filter dropdown
     
-    // Show the details of a single blog post
-    public function show($id)
-    {
-        $blog = Blog::findOrFail($id);
-        return view('home.blog_details', compact('blog'));
+        return view('home.blog', compact('blogs', 'categories'));
     }
-
+    
+    
     // Store a new comment for a specific blog post
     public function storeComment(Request $request, $blogId)
     {
@@ -62,20 +51,45 @@ class BlogController extends Controller
 
         return redirect()->route('home.blog_details', $blog->id)->with('success', 'Comment added successfully!');
     }
+    public function show($id)
+{
+    $blog = Blog::findOrFail($id);
+    return view('home.blog_details', compact('blog'));
+}
 
-    public function showAdmin()
+
+    // Show the admin panel for managing blogs
+    public function showAdmin(Request $request)
     {
-        $blogs = Blog::all(); // Fetch all blog posts for admin
-        return view('admin.show_blogs', compact('blogs'));
+        $sortField = $request->input('sort', 'id'); // Default to sorting by ID
+        $sortDirection = $request->input('direction', 'asc'); // Default to ascending order
+
+        // Validate sort field and direction
+        $validSortFields = ['id', 'title'];
+        if (!in_array($sortField, $validSortFields)) {
+            $sortField = 'id'; // Default to ID if invalid field
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc'; // Default to ascending if invalid direction
+        }
+
+        // Fetch and sort blogs with pagination
+        $blogs = Blog::with('category') // Eager load category
+                     ->orderBy($sortField, $sortDirection)
+                     ->paginate(10); // Adjust pagination size as needed
+
+        return view('admin.show_blogs', compact('blogs', 'sortField', 'sortDirection'));
     }
 
     // Show the form to edit a blog post
     public function edit($id)
     {
         $blog = Blog::findOrFail($id); // Fetch the blog by ID or fail if not found
-        return view('admin.edit_show', compact('blog')); // Return the edit view with the blog data
+        $categories = Category::all(); // Fetch all categories for the dropdown
+        return view('admin.edit_show', compact('blog', 'categories')); // Pass categories to the edit view
     }
 
+    // Update a blog post
     public function update(Request $request, $id)
     {
         // Validate the request
@@ -84,6 +98,7 @@ class BlogController extends Controller
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validate image file
             'excerpt' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id' // Validate category_id
         ]);
 
         // Find the blog post by ID
@@ -93,6 +108,7 @@ class BlogController extends Controller
         $blog->title = $request->input('title');
         $blog->content = $request->input('content');
         $blog->excerpt = $request->input('excerpt');
+        $blog->category_id = $request->input('category_id'); // Update the category_id
 
         // Check if a new image has been uploaded
         if ($request->hasFile('image')) {
@@ -130,11 +146,14 @@ class BlogController extends Controller
         return redirect()->route('admin.show_blogs')->with('success', 'Blog deleted successfully.');
     }
 
+    // Show the form to create a new blog post
     public function create()
     {
-        return view('admin.add_blog'); // Make sure this view file exists
+        $categories = Category::all(); // Fetch all categories for the dropdown
+        return view('admin.add_blog', compact('categories')); // Pass categories to the create view
     }
 
+    // Store a new blog post
     public function store(Request $request)
     {
         // Validate the request data
@@ -143,6 +162,7 @@ class BlogController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'content' => 'required|string',
             'excerpt' => 'required|string',
+            'category_id' => 'required|exists:categories,id' // Validate category_id
         ]);
 
         // Create a new blog instance
@@ -150,6 +170,7 @@ class BlogController extends Controller
         $blog->title = $request->input('title');
         $blog->content = $request->input('content');
         $blog->excerpt = $request->input('excerpt');
+        $blog->category_id = $request->input('category_id'); // Set the category_id
 
         // Handle the image upload
         if ($request->hasFile('image')) {

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,7 +29,6 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('admin/img/favicon.ico') }}">
 </head>
-
 <body style="background-color: #121417; color: #ccc;">
     <div class="container" style="padding: 30px 0;">
         <div class="page-header">
@@ -84,6 +82,18 @@
                                 <textarea id="content" name="content" class="form-control" rows="5" required>{{ old('content', $blog->content) }}</textarea>
                             </div>
 
+                            <!-- Category Field -->
+                            <div class="form-group">
+                                <label for="category_id">Category</label>
+                                <select id="category_id" name="category_id" class="form-control" required>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}" {{ $category->id == old('category_id', $blog->category_id) ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <!-- Current Image Display -->
                             @if ($blog->image)
                                 <div class="form-group">
@@ -135,5 +145,4 @@
         }
     </style>
 </body>
-
 </html>

@@ -113,19 +113,15 @@
     </style>
 </head>
 <body>
-
 @include('home.header')
 
 <div class="bookings">
     <div class="container">
-        <!-- Success Message -->
-    <!-- Success Message -->
-@if(session('success'))
-    <div id="successMessage" class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
+        @if(session('success'))
+            <div id="successMessage" class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="row mb-4">
             <div class="col-md-12">
@@ -177,12 +173,13 @@
                 <p>This action cannot be undone.</p>
             </div>
             <div class="modal-footer">
-                <form id="cancelForm" method="POST" action="{{ route('bookings.cancel') }}">
-                    @csrf
-                    <input type="hidden" name="booking_id" id="bookingId">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
-                </form>
+            <form id="cancelForm" method="POST" action="{{ route('bookings.cancel') }}">
+    @csrf
+    <input type="hidden" name="booking_id" id="bookingId">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+</form>
+
             </div>
         </div>
     </div>
@@ -195,29 +192,25 @@
 
 <script>
     $('#cancelModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var bookingId = button.data('id'); // Extract info from data-* attributes
+        var button = $(event.relatedTarget);
+        var bookingId = button.data('id');
         var roomTitle = button.data('room');
 
         var modal = $(this);
         modal.find('#roomTitle').text(roomTitle);
         modal.find('#bookingId').val(bookingId);
     });
-</script>
-<script>
+
     $(document).ready(function() {
-        // Auto-hide the success message after 5 seconds
         setTimeout(function() {
             $('#successMessage').addClass('fade-out');
-        }, 5000);  // 5 seconds
+        }, 5000);
 
-        // Completely remove the message after fade-out (optional)
         setTimeout(function() {
             $('#successMessage').remove();
-        }, 6000);  // 6 seconds (to ensure fade-out completes)
+        }, 6000);
     });
 </script>
-
 
 </body>
 </html>

@@ -164,13 +164,7 @@
             </div>
             
             <!-- Back to Blog Button -->
-            <div class="text-center mt-4">
-                <a href="{{ route('blog.index') }}" class="btn btn-primary">
-                    <i class="fa fa-arrow-left"></i> Back to Blog
-                </a>
-            </div>
-        </div>
-    </div>
+      
     <!-- End Blog Details -->
 
 </body>

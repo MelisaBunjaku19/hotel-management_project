@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,9 +45,33 @@
             </a>
         </div>
 
+        <!-- Sorting Form -->
+        <form method="GET" action="{{ route('admin.show_blogs') }}" class="mb-3">
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <select name="sort" class="form-control">
+                        <option value="id" {{ $sortField === 'id' ? 'selected' : '' }}>ID</option>
+                        <option value="title" {{ $sortField === 'title' ? 'selected' : '' }}>Title</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select name="direction" class="form-control">
+                        <option value="asc" {{ $sortDirection === 'asc' ? 'selected' : '' }}>Ascending</option>
+                        <option value="desc" {{ $sortDirection === 'desc' ? 'selected' : '' }}>Descending</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Sort</button>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('admin.show_blogs') }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
+
         <section class="no-padding-bottom">
             <div class="row justify-content-center">
-                <div class="col-md-10 col-lg-8">
+                <div class="col-md-12">
                     <div class="block">
                         <div class="block-body">
                             @if(session('success'))
@@ -60,6 +83,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
+                                        <th>Category</th> <!-- New Column for Category -->
                                         <th>Author</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
@@ -70,7 +94,20 @@
                                         <tr>
                                             <td>{{ $blog->id }}</td>
                                             <td>{{ $blog->title }}</td>
-                                            <td>{{ $blog->author }}</td>
+                                            <td>
+                                                @if($blog->category)
+                                                    {{ $blog->category->name }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(is_string($blog->author))
+                                                    {{ json_decode($blog->author)->name ?? 'N/A' }}
+                                                @else
+                                                    {{ $blog->author->name ?? 'N/A' }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if($blog->created_at)
                                                     {{ $blog->created_at->format('d-m-Y') }}
@@ -93,6 +130,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
+
+                            <!-- Pagination Links -->
+                            <div class="pagination justify-content-center">
+                                {{ $blogs->appends(['sort' => $sortField, 'direction' => $sortDirection])->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,9 +142,8 @@
         </section>
     </div>
 
-    <!-- Inline styles (unchanged) -->
+    <!-- Inline styles -->
     <style>
-        /* Button styles */
         .btn-secondary {
             background-color: #6c757d;
             border-color: #6c757d;
@@ -112,6 +153,77 @@
         .btn-secondary:hover {
             background-color: #5a6268;
             border-color: #545b62;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: #fff;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+        /* Table styles */
+        .table thead th {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            margin: 20px 0;
+        }
+
+        .pagination .page-item {
+            border: 1px solid #6c757d;
+            border-radius: .25rem;
+        }
+
+        .pagination .page-link {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #6c757d;
+        }
+
+        .pagination .page-link:hover {
+            color: #fff;
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .pagination .active .page-link {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
         }
     </style>
 </body>
