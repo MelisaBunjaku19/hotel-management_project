@@ -8,13 +8,48 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all rooms
-        $rooms = Room::all();
+        // Fetch all rooms query
+        $query = Room::query();
+    
+        // Apply room type filter if provided
+        if ($request->filled('room_type')) {
+            $query->where('room_type', $request->input('room_type'));
+        }
+    
+        // Apply price range filter if provided
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+    
+        if (is_numeric($minPrice) && is_numeric($maxPrice)) {
+            // Ensure that minPrice is less than or equal to maxPrice
+            $minPrice = floatval($minPrice);
+            $maxPrice = floatval($maxPrice);
+            $query->whereBetween('price', [$minPrice, $maxPrice]);
+        } elseif (is_numeric($minPrice)) {
+            // If only min_price is provided
+            $minPrice = floatval($minPrice);
+            $query->where('price', '>=', $minPrice);
+        } elseif (is_numeric($maxPrice)) {
+            // If only max_price is provided
+            $maxPrice = floatval($maxPrice);
+            $query->where('price', '<=', $maxPrice);
+        }
+    
+        // Apply Wi-Fi filter if provided
+        if ($request->filled('wifi')) {
+            $wifi = $request->input('wifi');
+            // Convert 'yes' to 1 and 'no' to 0
+            $wifiValue = ($wifi === 'yes') ? 1 : 0;
+            $query->where('wifi', $wifiValue);
+        }
+    
+        // Fetch the filtered rooms
+        $rooms = $query->get();
     
         // Fetch the booked rooms by querying the bookings table
-        $bookedRoomIds = Booking::pluck('room_id')->toArray(); // Assuming the 'room_id' field exists in your 'bookings' table
+        $bookedRoomIds = Booking::pluck('room_id')->toArray();
     
         // Fetch the rooms booked by the logged-in user
         $userBookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
@@ -22,7 +57,9 @@ class RoomController extends Controller
         // Return the view and pass the necessary data
         return view('home.rooms', compact('rooms', 'bookedRoomIds', 'userBookedRoomIds'));
     }
-
+    
+    
+    
     // Display a listing of all rooms in the admin dashboard
     public function adminIndex(Request $request)
     {

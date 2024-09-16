@@ -14,7 +14,12 @@
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
-    
+    @php
+    function highlight($text, $search) {
+        if (!$search) return $text;
+        return preg_replace('/(' . preg_quote($search, '/') . ')/iu', '<span class="highlight">$1</span>', $text);
+    }
+@endphp
     <style>
         /* Custom styles for the blog page */
         .blog .titlepage h2 {
@@ -24,27 +29,72 @@
         .blog .card {
             border: none;
             border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease; /* Add hover effect */
+        }
+        .blog .card:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+        }
+        .blog .card-img-top {
+            width: 100%;
+            height: 200px; /* Set a fixed height for all images */
+            object-fit: cover; /* Ensures the image fits and crops if necessary */
+            object-position: center;
+        }
+        .blog .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .blog .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .blog .category-label {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px; /* Smaller font size */
+            color: #fff;
+            font-weight: bold;
+            margin-right: auto; /* Align to the left */
+        }
+        .blog .card-text {
+            flex-grow: 1;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
         }
         .blog .btn-primary {
             background-color: #343a40;
             border-color: #343a40;
+            width: fit-content; /* Adjust button width */
+            padding: 8px 20px; /* Add padding for the button */
+            margin: 0 auto; /* Center button */
         }
         .blog .btn-primary:hover {
             background-color: #212529;
             border-color: #212529;
         }
         .header {
-            background: #333; /* Dark gray background */
-            color: white; /* Light gray text */
+            background: #333;
+            color: white;
             padding: 15px 0;
-            border-bottom: 2px solid #444; /* Slightly lighter gray border */
+            border-bottom: 2px solid #444;
         }
         .footer {
-            background: #333; /* Dark gray background */
-            color: #f5f5f5; /* Light gray text */
+            background: #333;
+            color: #f5f5f5;
             padding: 40px 0;
             text-align: center;
-            border-top: 2px solid #444; /* Slightly lighter gray border */
+            border-top: 2px solid #444;
         }
         .search-form {
             margin-bottom: 20px;
@@ -64,22 +114,18 @@
             background-color: #212529;
             border-color: #212529;
         }
-        .category-label {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: #fff; /* White text color */
-            font-size: 14px;
-            font-weight: bold;
+        .highlight {
+            background-color: yellow; /* Highlight color */
         }
 
-        .category-travel { background-color: #007bff; } /* Blue */
-        .category-luxury { background-color: #28a745; } /* Green */
-        .category-budget { background-color: #ffc107; } /* Yellow */
-        .category-eco-friendly { background-color: #17a2b8; } /* Teal */
-        .category-technology { background-color: #dc3545; } /* Red */
-        .category-destinations { background-color: #6f42c1; } /* Purple */
-        .category-tips { background-color: #fd7e14; } /* Orange */
+        /* Colors for specific categories */
+        .category-travel { background-color: #007bff; }
+        .category-luxury { background-color: #28a745; }
+        .category-budget { background-color: #ffc107; }
+        .category-eco-friendly { background-color: #17a2b8; }
+        .category-technology { background-color: #dc3545; }
+        .category-destinations { background-color: #6f42c1; }
+        .category-tips { background-color: #fd7e14; }
     </style>
 </head>
 <body>
@@ -122,21 +168,17 @@
             <div class="row">
                 @forelse($blogs as $blog)
                     <div class="col-md-4 col-sm-6 mb-4">
-                        <div class="blog_card card h-100">
-                            <div class="blog_img card-img-top">
-                                <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="img-fluid">
-                            </div>
+                        <div class="card blog_card">
+                            <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $blog->title }}</h5>
-                                <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
-
-                                <!-- Displaying the single category -->
+                                <h5 class="card-title">{!! highlight($blog->title, $searchQuery) !!}</h5>
+                                <!-- Displaying the category with improved design -->
                                 @if($blog->category)
                                     <span class="category-label category-{{ strtolower(str_replace(' ', '-', $blog->category->name)) }}">
                                         {{ $blog->category->name }}
                                     </span>
                                 @endif
-
+                                <p class="card-text">{!! highlight(Str::limit($blog->content, 100), $searchQuery) !!}</p>
                                 <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-primary">Read More</a>
                             </div>
                         </div>
@@ -147,15 +189,11 @@
                     </div>
                 @endforelse
             </div>
-
         </div>
     </div>
 
     <!-- Footer -->
     @include('home.footer')
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

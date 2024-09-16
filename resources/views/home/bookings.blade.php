@@ -11,6 +11,9 @@
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
     <style>
         /* Custom styles for the bookings page */
+        .bookings .titlepage {
+            margin-top: 60px; /* Adjust this value to move the title down */
+        }
         .bookings .titlepage h2 {
             font-size: 40px;
             color: black;
@@ -72,25 +75,25 @@
         }
         /* Message and modal button enhancements */
         .alert-success {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        font-size: 1rem;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 20px;
-        opacity: 1;
-        transition: opacity 0.5s ease-in-out;
-        position: relative;
-        top: 20px;
-        z-index: 999;
-    }
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+            position: relative;
+            top: 20px;
+            z-index: 999;
+        }
 
-    /* Fade out animation */
-    .alert-success.fade-out {
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
-    }
+        /* Fade out animation */
+        .alert-success.fade-out {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
 
         .modal-footer .btn-secondary {
             background-color: #6c757d;
@@ -173,13 +176,12 @@
                 <p>This action cannot be undone.</p>
             </div>
             <div class="modal-footer">
-            <form id="cancelForm" method="POST" action="{{ route('bookings.cancel') }}">
-    @csrf
-    <input type="hidden" name="booking_id" id="bookingId">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
-</form>
-
+                <form id="cancelForm" method="POST" action="{{ route('bookings.cancel') }}">
+                    @csrf
+                    <input type="hidden" name="booking_id" id="bookingId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                </form>
             </div>
         </div>
     </div>

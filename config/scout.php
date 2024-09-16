@@ -15,13 +15,19 @@ return [
     |            "database", "collection", "null"
     |
     */
+'driver' => env('SCOUT_DRIVER', 'elasticsearch'),
 
-    'driver' => env('SCOUT_DRIVER', 'algolia'),
-     
-    'algolia' => [
-        'id' => env('ALGOLIA_ID'),
-        'secret' => env('ALGOLIA_SECRET'),
+'elasticsearch' => [
+    'index' => env('ELASTICSEARCH_INDEX', 'default'),
+    'hosts' => [
+        env('ELASTICSEARCH_HOST', 'localhost:9200'),
     ],
+    'basic_auth' => [
+        'user' => env('ELASTICSEARCH_USER', 'elastic'),
+        'password' => env('ELASTICSEARCH_PASSWORD', '12345678'),
+    ],
+],
+
     /*
     |--------------------------------------------------------------------------
     | Index Prefix
@@ -116,10 +122,6 @@ return [
     |
     */
 
-    'algolia' => [
-        'id' => env('ALGOLIA_APP_ID', ''),
-        'secret' => env('ALGOLIA_SECRET', ''),
-    ],
 
     /*
     |--------------------------------------------------------------------------

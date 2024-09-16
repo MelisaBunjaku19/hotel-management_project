@@ -12,6 +12,12 @@ use App\Models\Room;
 use App\Http\Controllers\MongoDBTestController;
 use App\Http\Controllers\TaskController;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\BookingsExportController;
+use App\Http\Controllers\RoomExportController;
+use App\Http\Controllers\BlogExportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -213,3 +219,26 @@ Route::post('/tasks', [TaskController::class, 'store'])->name('admin.store');
 
 // Add route for showing room availability
 Route::get('/room_availability', [RoomController::class, 'showAvailability'])->name('admin.room_availability');
+
+
+
+
+Route::get('/export-users', function () {
+    return Excel::download(new UsersExport, 'users.xlsx');
+});
+Route::get('/export-users', [ExportController::class, 'exportUsers']);
+
+
+
+Route::get('/export-bookings', [BookingsExportController::class, 'exportBookings'])->name('export.bookings');
+
+
+
+
+// Route to handle room export
+Route::get('/export-rooms', [RoomExportController::class, 'exportRooms'])->name('export.rooms');
+
+
+
+// Route to handle blog export
+Route::get('/export-blogs', [BlogExportController::class, 'exportBlogs'])->name('export.blogs');

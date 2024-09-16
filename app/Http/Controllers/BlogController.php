@@ -11,14 +11,26 @@ use Illuminate\Support\Facades\DB;
 class BlogController extends Controller
 {
     // Display all blogs with optional search and category filtering
-    public function index()
+    public function index(Request $request)
     {
-        $searchQuery = request()->input('searchQuery', '');
-        $categoryId = request()->input('category', '');
+        $searchQuery = $request->input('searchQuery', '');
+        $categoryId = $request->input('category', '');
+        $sortField = $request->input('sort_by', 'created_at'); // Default to sorting by creation date
+        $sortDirection = $request->input('direction', 'desc'); // Default to descending order
+    
+        // Validate sort field and direction
+        $validSortFields = ['id', 'title', 'created_at'];
+        if (!in_array($sortField, $validSortFields)) {
+            $sortField = 'created_at'; // Default to creation date if invalid field
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc'; // Default to descending if invalid direction
+        }
     
         // Build the query based on search and category filters
         $query = Blog::query();
     
+        // Full-text search on title only
         if ($searchQuery) {
             $query->where('title', 'LIKE', '%' . $searchQuery . '%');
         }
@@ -27,13 +39,19 @@ class BlogController extends Controller
             $query->where('category_id', $categoryId);
         }
     
-        $blogs = $query->get();
-        $categories = Category::all();  // Fetch all categories for the filter dropdown
+        // Apply sorting
+        $query->orderBy($sortField, $sortDirection);
     
-        return view('home.blog', compact('blogs', 'categories'));
+        // Fetch the blogs
+        $blogs = $query->get();
+    
+        // Fetch all categories for the filter dropdown
+        $categories = Category::all();
+    
+        return view('home.blog', compact('blogs', 'categories', 'searchQuery', 'categoryId'));
     }
     
-    
+
     // Store a new comment for a specific blog post
     public function storeComment(Request $request, $blogId)
     {
@@ -51,12 +69,12 @@ class BlogController extends Controller
 
         return redirect()->route('home.blog_details', $blog->id)->with('success', 'Comment added successfully!');
     }
-    public function show($id)
-{
-    $blog = Blog::findOrFail($id);
-    return view('home.blog_details', compact('blog'));
-}
 
+    public function show($id)
+    {
+        $blog = Blog::findOrFail($id);
+        return view('home.blog_details', compact('blog'));
+    }
 
     // Show the admin panel for managing blogs
     public function showAdmin(Request $request)
@@ -65,7 +83,7 @@ class BlogController extends Controller
         $sortDirection = $request->input('direction', 'asc'); // Default to ascending order
 
         // Validate sort field and direction
-        $validSortFields = ['id', 'title'];
+        $validSortFields = ['id', 'title', 'created_at'];
         if (!in_array($sortField, $validSortFields)) {
             $sortField = 'id'; // Default to ID if invalid field
         }
