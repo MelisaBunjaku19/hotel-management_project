@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact; 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ContactMail;
-// Ensure this model is correctly defined
 
 class ContactController extends Controller
 {
@@ -20,18 +17,12 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        // Send the email
-        Mail::to('your-email@example.com')->send(new ContactMail($validatedData));
-
-        // Return a response (you might want to redirect to a thank you page)
-        return response()->json(['message' => 'Your message has been sent successfully!']);
-
         // Save contact form data to the database
         Contact::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'message' => $validated['message'],
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'message' => $validatedData['message'],
         ]);
 
         // Redirect back with a success message

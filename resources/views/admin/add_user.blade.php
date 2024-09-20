@@ -30,7 +30,7 @@
     <link rel="shortcut icon" href="{{ asset('admin/img/favicon.ico') }}">
 
     <!-- intl-tel-input CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
 </head>
 <body style="background-color: #121417; color: #ccc;">
     <div class="container" style="padding: 30px 0;">
@@ -68,17 +68,18 @@
 
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter user name" required>
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter user name" value="{{ old('name') }}" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter user email" required>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter user email" value="{{ old('email') }}" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
                                     <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter phone number" required>
+                                    <input type="hidden" id="full_phone_number" name="full_phone_number">
                                 </div>
 
                                 <div class="form-group">
@@ -161,42 +162,29 @@
     <!-- intl-tel-input Integration -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const phoneInputField = document.querySelector("#phone");
-            const phoneInput = window.intlTelInput(phoneInputField, {
-                initialCountry: "auto",
-                geoIpLookup: function(callback) {
-                    fetch('https://ipinfo.io/json?token=YOUR_API_KEY')
-                    .then((response) => response.json())
-                    .then((json) => {
-                        const countryCode = (json && json.country) ? json.country : "us";
-                        callback(countryCode);
-                    })
-                    .catch(() => {
-                        callback("us");
-                    });
-                },
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneInputField = document.querySelector("#phone");
+        const fullPhoneInputField = document.querySelector("#full_phone_number");
 
-            // Adjust the width of the phone input to match the other inputs
-            const phoneInputContainer = phoneInputField.closest('.form-group');
-            if (phoneInputContainer) {
-                phoneInputContainer.style.width = '100%'; // Match the width of other inputs
-            }
-
-            // Handle form submission
-            document.querySelector("form").addEventListener("submit", function(e) {
-                const phoneNumber = phoneInput.getNumber();
-
-                // Add the phone number with country code to a hidden input or directly submit it
-                const hiddenInput = document.createElement("input");
-                hiddenInput.type = "hidden";
-                hiddenInput.name = "full_phone_number";
-                hiddenInput.value = phoneNumber;
-                this.appendChild(hiddenInput);
-            });
+        const phoneInput = window.intlTelInput(phoneInputField, {
+            initialCountry: "auto",
+            separateDialCode: true,
+            // Optional: Use geoIpLookup for automatic country detection
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js" // For formatting and validation
         });
+
+        // Ensure the full phone number is added to the hidden field before form submission
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const phoneNumber = phoneInput.getNumber(); // Get the full formatted phone number
+            if (phoneInput.isValidNumber()) {
+                fullPhoneInputField.value = phoneNumber; // Set the hidden input's value
+            } else {
+                e.preventDefault(); // Prevent form submission
+                alert('Please enter a valid phone number.');
+            }
+        });
+    });
     </script>
+
 </body>
 </html>

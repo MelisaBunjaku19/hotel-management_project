@@ -151,31 +151,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const phoneInputField = document.querySelector("#phone");
-            const phoneInput = window.intlTelInput(phoneInputField, {
+            window.intlTelInput(phoneInputField, {
+                // No geoIpLookup and utilsScript
                 initialCountry: "auto",
-                geoIpLookup: function(callback) {
-                    fetch('https://ipinfo.io/json?token=YOUR_API_KEY')
-                        .then((response) => response.json())
-                        .then((json) => {
-                            const countryCode = (json && json.country) ? json.country : "us";
-                            callback(countryCode);
-                        })
-                        .catch(() => {
-                            callback("us");
-                        });
-                },
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                nationalMode: true,
+                separateDialCode: true,
+                // You can add other options as needed
             });
 
             // Handle form submission
             document.querySelector("form").addEventListener("submit", function(e) {
-                const phoneNumber = phoneInput.getNumber();
-
+                const phoneInput = phoneInputField.intlTelInput.getNumber();
+                
                 // Add the phone number with country code to a hidden input or directly submit it
                 const hiddenInput = document.createElement("input");
                 hiddenInput.type = "hidden";
                 hiddenInput.name = "full_phone_number";
-                hiddenInput.value = phoneNumber;
+                hiddenInput.value = phoneInput;
                 this.appendChild(hiddenInput);
             });
         });

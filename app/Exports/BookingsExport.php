@@ -62,11 +62,11 @@ class BookingsExport
     }
 
     /**
-     * Export the bookings and download the file.
+     * Export the bookings and download the file as Excel.
      *
      * @return \Illuminate\Http\Response
      */
-    public function download()
+    public function downloadExcel()
     {
         $spreadsheet = $this->export();
         $writer = $this->save($spreadsheet);
@@ -78,5 +78,75 @@ class BookingsExport
 
         // Return the file as a response
         return Response::download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Export the bookings and download the file as CSV.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadCsv()
+    {
+        $fileName = 'bookings.csv';
+        $filePath = storage_path('app/' . $fileName);
+
+        // Open file in write mode
+        $file = fopen($filePath, 'w');
+
+        // Add CSV headers
+        fputcsv($file, ['ID', 'Room Title', 'Arrival Date', 'Departure Date', 'Amount Paid', 'Status', 'User ID', 'Created At', 'Updated At']);
+
+        // Fetch data and write to CSV
+        $bookings = Booking::with('room')->get();
+        foreach ($bookings as $booking) {
+            fputcsv($file, [
+                $booking->id,
+                $booking->room->room_title,
+                $booking->arrival_date,
+                $booking->departure_date,
+                $booking->amount_paid,
+                $booking->status,
+                $booking->user_id,
+                $booking->created_at,
+                $booking->updated_at,
+            ]);
+        }
+
+        // Close the CSV file
+        fclose($file);
+
+        return Response::download($filePath)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Export the bookings and download the file as JSON.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadJson()
+    {
+        $fileName = 'bookings.json';
+        $filePath = storage_path('app/' . $fileName);
+
+        // Fetch data
+        $bookings = Booking::with('room')->get();
+        $data = $bookings->map(function ($booking) {
+            return [
+                'ID' => $booking->id,
+                'Room Title' => $booking->room->room_title,
+                'Arrival Date' => $booking->arrival_date,
+                'Departure Date' => $booking->departure_date,
+                'Amount Paid' => $booking->amount_paid,
+                'Status' => $booking->status,
+                'User ID' => $booking->user_id,
+                'Created At' => $booking->created_at,
+                'Updated At' => $booking->updated_at,
+            ];
+        });
+
+        // Save JSON file
+        file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
+
+        return Response::download($filePath)->deleteFileAfterSend(true);
     }
 }

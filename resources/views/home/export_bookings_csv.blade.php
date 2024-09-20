@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Export Blogs - HotelH</title>
+    <title>Export Bookings - CSV</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
     <style>
-        /* Custom styles for the export page */
         .export-page {
             margin: 50px auto;
             text-align: center;
@@ -38,13 +37,14 @@
     @include('home.header')
 
     <div class="export-page">
-        <h1>Export Blogs</h1>
-        <a href="{{ route('export.blogs') }}" class="btn btn-export">Download Bookings</a>
+        <h1>Export Bookings as CSV</h1>
+        <a href="{{ route('export.bookings.csv') }}" class="btn btn-export">Download as CSV</a>
     </div>
 
     @include('home.footer')
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
 </body>
 </html>

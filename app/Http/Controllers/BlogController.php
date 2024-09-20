@@ -6,7 +6,6 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
@@ -50,7 +49,6 @@ class BlogController extends Controller
     
         return view('home.blog', compact('blogs', 'categories', 'searchQuery', 'categoryId'));
     }
-    
 
     // Store a new comment for a specific blog post
     public function storeComment(Request $request, $blogId)

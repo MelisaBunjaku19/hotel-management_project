@@ -101,7 +101,7 @@
                                                 <td>{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->phone }}</td>
+                                                <td>{{ $user->phone ?? 'N/A' }}</td> <!-- Display phone number -->
                                                 <td>{{ $user->usertype }}</td>
                                                 <td>
                                                     @if($user->created_at)
@@ -183,4 +183,5 @@
         }
     </style>
 </body>
+
 </html>

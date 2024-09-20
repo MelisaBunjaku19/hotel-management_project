@@ -3,77 +3,114 @@
 namespace App\Exports;
 
 use App\Models\Blog;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Response;
 
 class BlogsExport
 {
     /**
-     * Create a spreadsheet and return it.
+     * Export blogs as Excel.
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadExcel()
+    {
+        $spreadsheet = $this->createSpreadsheet();
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        $filename = 'blogs_export_' . date('Ymd_His') . '.xlsx';
+        $filePath = storage_path('app/' . $filename);
+        $writer->save($filePath);
+
+        return Response::download($filePath)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Export blogs as CSV.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadCsv()
+    {
+        $filename = 'blogs_export_' . date('Ymd_His') . '.csv';
+        $filePath = storage_path('app/' . $filename);
+
+        // Open file in write mode
+        $file = fopen($filePath, 'w');
+
+        // Add CSV headers
+        fputcsv($file, ['ID', 'Title', 'Category', 'Author', 'Created At']);
+
+        // Fetch blog data and write to CSV
+        $blogs = Blog::with('category', 'author')->get();
+        foreach ($blogs as $blog) {
+            $category = $blog->category->name ?? 'N/A';
+            $author = $blog->author->name ?? 'N/A';
+            $createdAt = $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A';
+            fputcsv($file, [$blog->id, $blog->title, $category, $author, $createdAt]);
+        }
+
+        // Close the CSV file
+        fclose($file);
+
+        return Response::download($filePath)->deleteFileAfterSend(true);
+    }
+    /**
+     * Export blogs as JSON.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function downloadJson()
+    {
+        $filename = 'blogs_export_' . date('Ymd_His') . '.json';
+        $filePath = storage_path('app/' . $filename);
+
+        // Fetch blog data
+        $blogs = Blog::with('category', 'author')->get()->map(function ($blog) {
+            return [
+                'ID' => $blog->id,
+                'Title' => $blog->title,
+                'Category' => $blog->category->name ?? 'N/A',
+                'Author' => $blog->author->name ?? 'N/A',
+                'Created At' => $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A'
+            ];
+        });
+
+        // Write JSON to file
+        file_put_contents($filePath, $blogs->toJson(JSON_PRETTY_PRINT));
+
+        return Response::download($filePath)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Create a Spreadsheet object for Excel export.
      *
      * @return \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
-    public function export()
+    private function createSpreadsheet()
     {
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-    
-        // Set headings
+
+        // Set column headings
         $sheet->setCellValue('A1', 'ID');
         $sheet->setCellValue('B1', 'Title');
         $sheet->setCellValue('C1', 'Category');
         $sheet->setCellValue('D1', 'Author');
         $sheet->setCellValue('E1', 'Created At');
-    
-        // Fetch data
+
+        // Fetch blog data and fill spreadsheet
         $blogs = Blog::with('category', 'author')->get();
         $row = 2;
-    
+
         foreach ($blogs as $blog) {
             $sheet->setCellValue('A' . $row, $blog->id);
             $sheet->setCellValue('B' . $row, $blog->title);
             $sheet->setCellValue('C' . $row, $blog->category->name ?? 'N/A');
-            $sheet->setCellValue('D' . $row, is_string($blog->author) ? json_decode($blog->author)->name ?? 'N/A' : ($blog->author->name ?? 'N/A'));
-    
-            // Check if created_at is not null
-            $createdAt = $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A';
-            $sheet->setCellValue('E' . $row, $createdAt);
-    
+            $sheet->setCellValue('D' . $row, $blog->author->name ?? 'N/A');
+            $sheet->setCellValue('E' . $row, $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A');
             $row++;
         }
-    
+
         return $spreadsheet;
-    }
-
-    /**
-     * Create a writer instance to save the spreadsheet.
-     *
-     * @param \PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet
-     * @return \PhpOffice\PhpSpreadsheet\Writer\Xlsx
-     */
-    public function save($spreadsheet)
-    {
-        $writer = new Xlsx($spreadsheet);
-        return $writer;
-    }
-
-    /**
-     * Export the blogs and download the file.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function download()
-    {
-        $spreadsheet = $this->export();
-        $writer = $this->save($spreadsheet);
-
-        // Output to a file
-        $fileName = 'blogs.xlsx';
-        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
-        $writer->save($tempFile);
-
-        // Return the file as a response
-        return Response::download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 }

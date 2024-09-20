@@ -15,19 +15,7 @@ return [
     |            "database", "collection", "null"
     |
     */
-'driver' => env('SCOUT_DRIVER', 'elasticsearch'),
-
-'elasticsearch' => [
-    'index' => env('ELASTICSEARCH_INDEX', 'default'),
-    'hosts' => [
-        env('ELASTICSEARCH_HOST', 'localhost:9200'),
-    ],
-    'basic_auth' => [
-        'user' => env('ELASTICSEARCH_USER', 'elastic'),
-        'password' => env('ELASTICSEARCH_PASSWORD', '12345678'),
-    ],
-],
-
+'driver' => env('SCOUT_DRIVER', NULL),
     /*
     |--------------------------------------------------------------------------
     | Index Prefix

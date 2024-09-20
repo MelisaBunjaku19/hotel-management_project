@@ -6,10 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "algolia/algoliasearch-client-php": "3.2",
+        "barryvdh/laravel-dompdf": "^3.0",
         "elasticsearch/elasticsearch": "^8.15",
         "guzzlehttp/guzzle": "^7.9",
-        "jenssegers/mongodb": "^4.8",
+        "jenssegers/mongodb": "*",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",

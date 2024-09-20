@@ -69,6 +69,26 @@
             color: #555;
             margin-bottom: 10px;
         }
+        .receipt-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .receipt-container a {
+            display: inline-block;
+            font-size: 16px;
+            color: #fff;
+            background: linear-gradient(45deg, #ff6f61, #d84a59);
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .receipt-container a:hover {
+            background: linear-gradient(45deg, #d84a59, #ff6f61);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -91,7 +111,28 @@
             </div>
 
             <a href="{{ route('bookings.index') }}" class="btn btn-primary">View Your Booking</a>
+            
+            <!-- Receipt Download Section -->
+            <div class="receipt-container">
+                <h3>Your Receipt</h3>
+                <a id="download-receipt" href="#" download="receipt.txt">Download Receipt</a>
+            </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var receiptDetails = "Room: {{ $room->room_title }}\n" +
+            "Arrival Date: {{ $arrivalDate }}\n" +
+            "Departure Date: {{ $departureDate }}\n" +
+            "Price: ${{ number_format($room->price, 2) }}\n" +
+            "Amount Paid: ${{ number_format($amountPaid, 2) }}\n";
+
+        var blob = new Blob([receiptDetails], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+        var downloadLink = document.getElementById('download-receipt');
+        downloadLink.href = url;
+    });
+    </script>
 </body>
 </html>

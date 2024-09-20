@@ -8,13 +8,35 @@ use Illuminate\Http\Request;
 class BlogExportController extends Controller
 {
     /**
-     * Handle the export request and return the spreadsheet.
+     * Export blogs as Excel.
      *
      * @return \Illuminate\Http\Response
      */
     public function exportBlogs()
     {
         $export = new BlogsExport();
-        return $export->download();
+        return $export->downloadExcel();
+    }
+
+    /**
+     * Export blogs as CSV.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportBlogsCsv()
+    {
+        $export = new BlogsExport();
+        return $export->downloadCsv();
+    }
+
+    /**
+     * Export blogs as JSON.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportBlogsJson()
+    {
+        $export = new BlogsExport();
+        return $export->downloadJson();
     }
 }

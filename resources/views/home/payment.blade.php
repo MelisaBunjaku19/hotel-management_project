@@ -167,7 +167,7 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        var stripe = Stripe('pk_test_51PsAoEInW0Dbu0672FZgmITGWySNEAvRY5mjB6zKfgJA1Rdv8BQYomIYdYaMKUv7qtiAd0HiCW2quV9kivedNaOB00AEqFJWAZ');
+        var stripe = Stripe('pk_test_51PsAoEInW0Dbu067ayd1POjtVJcOYZutsLJxMaT8j497hwHR1kIA82yZ8kWSU5n8witREQkW9x2cRBwzZGa0Y46400IGcJLwjj');
 
         document.getElementById('payment-form').addEventListener('submit', function(e) {
             e.preventDefault();

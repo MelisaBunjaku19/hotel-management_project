@@ -18,6 +18,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\BookingsExportController;
 use App\Http\Controllers\RoomExportController;
 use App\Http\Controllers\BlogExportController;
+use App\Http\Controllers\UsersImportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,22 +75,22 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 
 // Admin routes
 // Route to display all blogs
-Route::get('show_blogs', [BlogController::class, 'showAdmin'])->name('admin.show_blogs');
+Route::get('/show_blogs', [BlogController::class, 'showAdmin'])->name('admin.show_blogs');
 
 // Route to show the form to edit a blog post
-Route::get('show_blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.edit_blog');
+Route::get('/show_blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.edit_blog');
 
 // Route to update a blog post
-Route::put('show_blogs/{id}', [BlogController::class, 'update'])->name('admin.update_blog');
+Route::put('/show_blogs/{id}', [BlogController::class, 'update'])->name('admin.update_blog');
 
 // Route to show the confirmation for deleting a blog post
-Route::get('show_blogs/{id}/delete', [BlogController::class, 'confirmDelete'])->name('admin.confirm_delete');
+Route::get('/show_blogs/{id}/delete', [BlogController::class, 'confirmDelete'])->name('admin.confirm_delete');
 
 // Route to delete a blog post
-Route::delete('show_blogs/{id}', [BlogController::class, 'destroy'])->name('admin.delete_blog');
+Route::delete('/show_blogs/{id}', [BlogController::class, 'destroy'])->name('admin.delete_blog');
 // Route to show the form for adding a new blog
 // Route to show the form for creating a new blog
-Route::get('add_blog/create', [BlogController::class, 'create'])->name('admin.add_blog');
+Route::get('/add_blog/create', [BlogController::class, 'create'])->name('admin.add_blog');
 
 // Route to store a new blog in the database
 
@@ -226,12 +227,11 @@ Route::get('/room_availability', [RoomController::class, 'showAvailability'])->n
 Route::get('/export-users', function () {
     return Excel::download(new UsersExport, 'users.xlsx');
 });
-Route::get('/export-users', [ExportController::class, 'exportUsers']);
-
 
 
 Route::get('/export-bookings', [BookingsExportController::class, 'exportBookings'])->name('export.bookings');
-
+Route::get('/export-bookings-csv', [BookingsExportController::class, 'exportBookingsCsv'])->name('export.bookings.csv');
+Route::get('/export-bookings-json', [BookingsExportController::class, 'exportBookingsJson'])->name('export.bookings.json');
 
 
 
@@ -241,4 +241,24 @@ Route::get('/export-rooms', [RoomExportController::class, 'exportRooms'])->name(
 
 
 // Route to handle blog export
+// Route for Excel export
 Route::get('/export-blogs', [BlogExportController::class, 'exportBlogs'])->name('export.blogs');
+
+Route::get('/export-blogs-csv', [BlogExportController::class, 'exportBlogsCsv'])->name('export.blogs.csv');
+Route::get('/export-blogs-json', [BlogExportController::class, 'exportBlogsJson'])->name('export.blogs.json');
+
+
+
+
+Route::get('/export-rooms-csv', [RoomExportController::class, 'exportRoomsCsv'])->name('export.rooms.csv');
+Route::get('/export-rooms-json', [RoomExportController::class, 'exportRoomsJson'])->name('export.rooms.json');
+
+
+Route::get('/export-users-csv', [ExportController::class, 'exportUsersCsv'])->name('export.users.csv');
+
+// Route to export users as JSON
+Route::get('/export-users-json', [ExportController::class, 'exportUsersJson'])->name('export.users.json');
+Route::get('/export-users', [ExportController::class, 'exportUsers']);
+
+
+

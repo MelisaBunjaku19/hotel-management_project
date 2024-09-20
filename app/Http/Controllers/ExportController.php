@@ -3,23 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class ExportController extends Controller
 {
+    /**
+     * Export users as Excel.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function exportUsers()
     {
         $export = new UsersExport();
-        $spreadsheet = $export->export();
-        $writer = $export->save($spreadsheet);
+        return $export->downloadExcel();
+    }
 
-        // Create a temporary file to save the spreadsheet
-        $tempFile = tempnam(sys_get_temp_dir(), 'users');
-        $writer->save($tempFile);
+    /**
+     * Export users as CSV.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportUsersCsv()
+    {
+        $export = new UsersExport();
+        return $export->downloadCsv();
+    }
 
-        // Return the file as a download response
-        return Response::download($tempFile, 'users.xlsx')->deleteFileAfterSend(true);
+    /**
+     * Export users as JSON.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportUsersJson()
+    {
+        $export = new UsersExport();
+        return $export->downloadJson();
     }
 }

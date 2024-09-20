@@ -17,14 +17,15 @@
         }
 
         .contact .titlepage h2 {
-        font-size: 42px; /* Same font size as About Us title */
-        color: #212121; /* Darker color for title */
-        font-weight: 700; /* Same font weight */
-        margin-bottom: 20px; /* Margin consistent with About Us */
-        text-transform: uppercase; /* Uppercase text */
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
-        text-align: center; /* Centered alignment */
-    }
+            font-size: 42px;
+            color: #212121;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
         .contact .main_form {
             background-color: #fff;
             padding: 30px;
@@ -79,8 +80,8 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .notification {
-            display: none;
+        .alert-success {
+            display: block;
             position: fixed;
             top: 10px;
             right: 10px;
@@ -91,22 +92,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             font-size: 16px;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.5s ease-in-out;
         }
+
         .header {
-      background: #333; /* Dark gray background */
-      color:white; /* Light gray text */
-      padding: 15px 0;
-      border-bottom: 2px solid #444; /* Slightly lighter gray border */
-    }
-    .footer {
-      background: #333; /* Dark gray background */
-      color: #f5f5f5; /* Light gray text */
-      padding: 40px 0;
-      text-align: center;
-      border-top: 2px solid #444; /* Slightly lighter gray border */
-    }
+            background: #333;
+            color: white;
+            padding: 15px 0;
+            border-bottom: 2px solid #444;
+        }
+
+        .footer {
+            background: #333;
+            color: #f5f5f5;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 2px solid #444;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +125,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- Display success message -->
+        @if (session('success'))
+            <div class="alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-md-6">
                 <form id="contact-form" class="main_form" method="POST" action="{{ route('contact.send') }}">
@@ -148,7 +159,9 @@
             <div class="col-md-6">
                 <div class="map_main">
                     <div class="map-responsive">
-                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&amp;q=Eiffel+Tower+Paris+France" width="600" height="400" frameborder="0" style="border:0; width: 100%;" allowfullscreen=""></iframe>
+                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&amp;q=Eiffel+Tower+Paris+France"
+                            width="600" height="400" frameborder="0" style="border:0; width: 100%;" allowfullscreen="">
+                        </iframe>
                     </div>
                 </div>
             </div>
@@ -156,39 +169,9 @@
     </div>
 </div>
 
-<div class="notification" id="notification">
-    Your message has been sent successfully!
-</div>
-
 @include('home.footer')
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('contact-form');
-        const notification = document.getElementById('notification');
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
-
-            // Show the notification
-            notification.style.display = 'block';
-            notification.style.opacity = 1;
-
-            // Fade out notification after 3 seconds
-            setTimeout(() => {
-                notification.style.opacity = 0;
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 500); // Delay to allow fade-out effect
-            }, 3000); // Adjust time as needed (in milliseconds)
-
-            // Clear form fields (optional)
-            form.reset();
-        });
-    });
-</script>
-
 </body>
 </html>
