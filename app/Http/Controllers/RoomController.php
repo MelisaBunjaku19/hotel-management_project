@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Models\Review;
 
 class RoomController extends Controller
 {
@@ -192,4 +193,31 @@ class RoomController extends Controller
         // Pass the data to the view
         return view('admin.room_availability', compact('rooms', 'bookedRoomIds'));
     }
+    public function storeReview(Request $request, $roomId)
+    {
+        // Validate the rating
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+    
+        // Check if user has already submitted a review for this room
+        $existingReview = Review::where('user_id', auth()->id())
+                                ->where('room_id', $roomId)
+                                ->first();
+    
+        if ($existingReview) {
+            return response()->json(['success' => false, 'message' => 'You have already submitted a review for this room.']);
+        }
+    
+        // Create a new review
+        Review::create([
+            'user_id' => auth()->id(),
+            'room_id' => $roomId,
+            'rating' => $request->rating,
+            'review' => $request->input('review', null), // Optional review text
+        ]);
+    
+        return response()->json(['success' => true, 'message' => 'Rating submitted successfully!']);
+    }
+    
 }

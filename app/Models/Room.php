@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,15 @@ class Room extends Model
         'is_booked',
     ];
 
+    // Define the relationship between Room and Review
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     // Define the relationship between Room and Booking
-  
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

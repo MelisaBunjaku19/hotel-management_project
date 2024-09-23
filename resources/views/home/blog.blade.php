@@ -126,6 +126,23 @@
         .category-technology { background-color: #dc3545; }
         .category-destinations { background-color: #6f42c1; }
         .category-tips { background-color: #fd7e14; }
+
+
+        .like-count {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Adjust space above */
+    font-weight: bold; /* Make the text bold */
+}
+.like-count i {
+    margin-right: 5px; /* Space between icon and number */
+    transition: color 0.3s ease; /* Smooth transition on hover */
+}
+.like-count i:hover {
+    color: darkred; /* Change color on hover */
+}
+
+
     </style>
 </head>
 <body>
@@ -137,63 +154,86 @@
     <div class="blog">
         <div class="container">
             <!-- Search Form -->
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <div class="search-form">
-                        <form method="GET" action="{{ route('blog.index') }}">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" name="searchQuery" placeholder="Search blogs by title" value="{{ request()->input('searchQuery') }}">
-                                <select class="form-control" name="category">
-                                    <option value="">All Categories</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="titlepage text-center">
-                        <h2>Blog</h2>
-                        <p>Discover our latest updates and stories on hotel management, travel tips, and more.</p>
+   <!-- Search Form -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="search-form">
+            <form method="GET" action="{{ route('blog.index') }}">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="searchQuery" placeholder="Search blogs by title" value="{{ request()->input('searchQuery') }}">
+                    
+                    <!-- Category Filter -->
+                    <select class="form-control" name="category">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <!-- Sort by Likes Filter -->
+                    <select class="form-control" name="sortBy">
+    <option value="">Sort by: Unordered</option> <!-- "Unordered" option -->
+    <option value="created_at" {{ request()->input('sortBy') == 'created_at' ? 'selected' : '' }}>Sort by: Newest</option>
+    <option value="most_liked" {{ request()->input('sortBy') == 'most_liked' ? 'selected' : '' }}>Sort by: Most Liked</option>
+</select>
+
+
+                    </select>
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
                     </div>
                 </div>
-            </div>
+            </form>
+        </div>
+        <div class="titlepage text-center">
+            <h2>Blog</h2>
+            <p>Discover our latest updates and stories on hotel management, travel tips, and more.</p>
+        </div>
+    </div>
+</div>
 
-            <!-- Blog Posts -->
-            <div class="row">
-                @forelse($blogs as $blog)
-                    <div class="col-md-4 col-sm-6 mb-4">
-                        <div class="card blog_card">
-                            <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">{!! highlight($blog->title, $searchQuery) !!}</h5>
-                                <!-- Displaying the category with improved design -->
-                                @if($blog->category)
-                                    <span class="category-label category-{{ strtolower(str_replace(' ', '-', $blog->category->name)) }}">
-                                        {{ $blog->category->name }}
-                                    </span>
-                                @endif
-                                <p class="card-text">{!! highlight(Str::limit($blog->content, 100), $searchQuery) !!}</p>
-                                <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-primary">Read More</a>
-                            </div>
-                        </div>
+<!-- Blog Posts -->
+<div class="row">
+    @forelse($blogs as $blog)
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card blog_card">
+                <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $blog->title }}</h5>
+                    @if($blog->category)
+                        <span class="category-label category-{{ strtolower(str_replace(' ', '-', $blog->category->name)) }}">
+                            {{ $blog->category->name }}
+                        </span>
+                    @endif
+                    <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
+
+                    <!-- Like Count -->
+                    <div class="like-count">
+                        <i class="fas fa-heart" style="color: red; font-size: 20px;"></i>
+                        <span style="margin-left: 5px; font-size: 16px;">{{ $blog->likes->count() }}</span>
                     </div>
-                @empty
-                    <div class="col-md-12">
-                        <p>No blog posts found.</p>
-                    </div>
-                @endforelse
+
+                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-primary">Read More</a>
+                </div>
             </div>
+        </div>
+    @empty
+        <div class="col-md-12">
+            <p>No blog posts found.</p>
+        </div>
+    @endforelse
+</div>
+
+
         </div>
     </div>
 
     <!-- Footer -->
     @include('home.footer')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </body>
 </html>

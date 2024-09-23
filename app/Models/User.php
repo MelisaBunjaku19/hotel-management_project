@@ -68,7 +68,11 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class);
     }
 
-
+    public function likes()
+    {
+        return $this->belongsToMany(Blog::class, 'likes')->withTimestamps();
+    }
+    
 
 
 }

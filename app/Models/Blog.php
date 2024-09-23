@@ -22,14 +22,15 @@ class Blog extends Model
     // Relationship with likes
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
-
-    // Relationship with reviews
-    public function reviews()
+    
+    
+    public function isLikedByUser()
     {
-        return $this->hasMany(Review::class);
+        return $this->likes()->where('user_id', auth()->id())->exists();
     }
+    
 
     // Relationship with category
     public function category()
@@ -44,10 +45,7 @@ class Blog extends Model
     }
 
     // Relationship with tags (many-to-many)
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
-    }
+  
 
     /**
      * Customize the data array to be indexed by Algolia.

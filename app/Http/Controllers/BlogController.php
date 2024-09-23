@@ -11,45 +11,68 @@ class BlogController extends Controller
 {
     // Display all blogs with optional search and category filtering
     public function index(Request $request)
-    {
-        $searchQuery = $request->input('searchQuery', '');
-        $categoryId = $request->input('category', '');
-        $sortField = $request->input('sort_by', 'created_at'); // Default to sorting by creation date
-        $sortDirection = $request->input('direction', 'desc'); // Default to descending order
-    
-        // Validate sort field and direction
-        $validSortFields = ['id', 'title', 'created_at'];
-        if (!in_array($sortField, $validSortFields)) {
-            $sortField = 'created_at'; // Default to creation date if invalid field
-        }
-        if (!in_array($sortDirection, ['asc', 'desc'])) {
-            $sortDirection = 'desc'; // Default to descending if invalid direction
-        }
-    
-        // Build the query based on search and category filters
-        $query = Blog::query();
-    
-        // Full-text search on title only
-        if ($searchQuery) {
-            $query->where('title', 'LIKE', '%' . $searchQuery . '%');
-        }
-    
-        if ($categoryId) {
-            $query->where('category_id', $categoryId);
-        }
-    
-        // Apply sorting
-        $query->orderBy($sortField, $sortDirection);
-    
-        // Fetch the blogs
-        $blogs = $query->get();
-    
-        // Fetch all categories for the filter dropdown
-        $categories = Category::all();
-    
-        return view('home.blog', compact('blogs', 'categories', 'searchQuery', 'categoryId'));
+{
+    $searchQuery = $request->input('searchQuery');
+    $category = $request->input('category');
+    $sortBy = $request->input('sortBy');
+
+    // Start building the query for blogs
+    $query = Blog::with('category', 'likes');
+
+    // Filter by search query if provided
+    if ($searchQuery) {
+        $query->where('title', 'LIKE', "%{$searchQuery}%");
     }
 
+    // Filter by category if provided
+    if ($category) {
+        $query->where('category_id', $category);
+    }
+
+    // Handle sorting
+    if ($sortBy === 'most_liked') {
+        // Sort by most liked
+        $query->withCount('likes')->orderBy('likes_count', 'desc');
+    } elseif ($sortBy === 'created_at') {
+        // Sort by newest
+        $query->orderBy('created_at', 'desc');
+    } else {
+        // Unordered: Don't apply any specific sorting
+        $query->inRandomOrder(); // Or leave it as is for unordered display
+    }
+
+    // Fetch the blogs
+    $blogs = $query->get();
+
+    // Fetch categories for the filter dropdown
+    $categories = Category::all();
+
+    // Return view with the blogs and categories
+    return view('home.blog', compact('blogs', 'categories'));
+}
+
+    public function toggleLike(Blog $blog)
+    {
+        $userId = auth()->user()->id;
+    
+        // Check if the user already liked the blog
+        if ($blog->likes()->where('user_id', $userId)->exists()) {
+            // If liked, unlike it
+            $blog->likes()->detach($userId);
+            $liked = false;
+        } else {
+            // If not liked, like it
+            $blog->likes()->attach($userId);
+            $liked = true;
+        }
+    
+        return response()->json([
+            'likes_count' => $blog->likes()->count(),
+            'liked' => $liked,
+        ]);
+    }
+    
+    
     // Store a new comment for a specific blog post
     public function storeComment(Request $request, $blogId)
     {

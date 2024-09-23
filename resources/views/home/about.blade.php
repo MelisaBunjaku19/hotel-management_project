@@ -235,7 +235,75 @@ body {
         padding: 15px 0;
         border-bottom: 2px solid #444; /* Slightly lighter gray border */
     }
+    .flashcards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
 
+.flashcard {
+    width: 320px; /* Increased width for a wider card */
+    height: 400px; /* Increased height for a taller card */
+    perspective: 1000px;
+    margin: 0 10px; /* Side margin for spacing */
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard:hover .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    overflow: hidden; /* Ensure images fit nicely */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px; /* Padding for text */
+}
+
+.flashcard-front {
+    background-color: #fff; /* Front background color */
+}
+
+.flashcard-back {
+    background-color: #f0f0f0; /* Back background color */
+    transform: rotateY(180deg); /* Back is initially rotated */
+    padding: 20px; /* Padding for better text spacing */
+    display: flex;
+    flex-direction: column; /* Stack text vertically */
+}
+
+.flashcard-image {
+    width: 100%;
+    height: 75%; /* Adjusted height for images to fit the new size */
+    object-fit: cover; /* Ensures the image covers the area */
+}
+
+.flashcard-back h3 {
+    margin: 0;
+    font-size: 1.5rem; /* Larger heading font */
+    font-weight: bold; /* Bold for emphasis */
+}
+
+.flashcard-back p {
+    font-size: 1rem; /* Standard paragraph size */
+    line-height: 1.5; /* Improved line spacing for readability */
+    color: #555; /* Darker text color for contrast */
+}
 
 
 </style>
@@ -258,7 +326,7 @@ body {
             </div>
             <div class="col-md-6">
                 <div class="about_img">
-                    <img src="images/about.png" alt="Hotel Management System"/>
+                    <img src="images/3026238.jpg" alt="Hotel Management System"/>
                 </div>
             </div>
         </div>
@@ -344,6 +412,54 @@ body {
     </div>
 </div>
 
+<div class="flashcards">
+    <div class="flashcard">
+        <div class="flashcard-inner">
+            <div class="flashcard-front">
+                <img src="/images/20945944.jpg" alt="Efficient Booking Management" class="flashcard-image">
+            </div>
+            <div class="flashcard-back">
+           
+                <p>Our system simplifies the booking process, ensuring that room reservations are handled with efficiency and accuracy.</p>
+            </div>
+        </div>
+    </div>
+    <div class="flashcard">
+        <div class="flashcard-inner">
+            <div class="flashcard-front">
+                <img src="/images/3909116.jpg" alt="Comprehensive Guest Services" class="flashcard-image">
+            </div>
+            <div class="flashcard-back">
+         
+                <p>Enhance the guest experience with our comprehensive service management tools.</p>
+            </div>
+        </div>
+    </div>
+    <div class="flashcard">
+        <div class="flashcard-inner">
+            <div class="flashcard-front">
+                <img src="/images/8608981.jpg" alt="Advanced Reporting" class="flashcard-image">
+            </div>
+            <div class="flashcard-back">
+             
+                <p>Get insights into bookings and guest preferences with our reporting tools.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script> 
+    const flashcards = document.querySelectorAll('.flashcard');
+
+flashcards.forEach(card => {
+    card.addEventListener('click', () => {
+        card.querySelector('.flashcard-inner').classList.toggle('flipped');
+    });
+});
+
+</script>
 
 @include('home.footer')
 

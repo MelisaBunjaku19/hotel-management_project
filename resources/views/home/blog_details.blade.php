@@ -95,6 +95,22 @@
             margin: 0;
         }
 
+        /* Like Section */
+        .like-section .liked {
+    color: red; /* Color when liked */
+}
+
+.like-section .like-text {
+    margin-left: 5px;
+}
+
+
+        .like-section .like-count {
+            margin-left: 10px;
+            font-size: 18px;
+            color: #666666;
+        }
+
         /* Centered Text */
         .text-center {
             text-align: center;
@@ -124,8 +140,8 @@
 </head>
 <body>
 
-    <!-- Blog Details -->
-    <div class="blog-details">
+   <!-- Blog Details -->
+   <div class="blog-details">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -138,7 +154,6 @@
                 <div class="col-md-8">
                     <div class="blog_box">
                         <div class="blog_img">
-                            <!-- Blog Image -->
                             <figure>
                                 <img src="{{ asset('images/' . $blog->image) }}" alt="Blog Image"/>
                             </figure>
@@ -157,10 +172,21 @@
                         </div>
                     </div>
 
+                    <!-- Like Button -->
+                 <!-- Like/Unlike Button -->
+<div class="like-section">
+    <button class="btn btn-primary like-button" data-id="{{ $blog->id }}">
+        <i class="fas fa-heart {{ $blog->isLikedByUser() ? 'liked' : '' }}"></i> 
+        <span class="like-text">{{ $blog->isLikedByUser() ? 'Unlike' : 'Like' }}</span>
+    </button>
+    <span class="like-count">{{ $blog->likes->count() }} Likes</span>
+</div>
+
+
                     <!-- Comments Form -->
                     <form action="{{ route('blog.comment.store', $blog->id) }}" method="POST">
                         @csrf
-                        <div class="form-group">
+                        <div class="form-group mt-4">
                             <label for="comment">Add a Comment</label>
                             <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
                         </div>
@@ -185,5 +211,40 @@
             </div>
         </div>
     </div>
+
+    <!-- jQuery Script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $('.like-button').on('click', function() {
+        const blogId = $(this).data('id');
+
+        $.ajax({
+            url: `/blog/${blogId}/like`,
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // Update like count
+                $('.like-count').text(response.likes_count + ' Likes');
+
+                // Toggle the like/unlike state
+                if (response.liked) {
+                    $('.like-button i').addClass('liked');
+                    $('.like-button .like-text').text('Unlike');
+                } else {
+                    $('.like-button i').removeClass('liked');
+                    $('.like-button .like-text').text('Like');
+                }
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>
+
+
+
 </body>
 </html>

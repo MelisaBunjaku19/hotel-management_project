@@ -93,7 +93,7 @@ Route::delete('/show_blogs/{id}', [BlogController::class, 'destroy'])->name('adm
 Route::get('/add_blog/create', [BlogController::class, 'create'])->name('admin.add_blog');
 
 // Route to store a new blog in the database
-
+Route::post('/blog/{blog}/like', [BlogController::class, 'toggleLike'])->name('blog.toggleLike');
 
 
 Route::get('/about', function () {
@@ -261,4 +261,6 @@ Route::get('/export-users-json', [ExportController::class, 'exportUsersJson'])->
 Route::get('/export-users', [ExportController::class, 'exportUsers']);
 
 
+
+Route::post('/save-review', [RoomController::class, 'storeReview']);
 
