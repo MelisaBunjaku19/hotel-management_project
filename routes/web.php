@@ -19,6 +19,7 @@ use App\Http\Controllers\BookingsExportController;
 use App\Http\Controllers\RoomExportController;
 use App\Http\Controllers\BlogExportController;
 use App\Http\Controllers\UsersImportController;
+use App\Http\Controllers\CustomAuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -264,3 +265,12 @@ Route::get('/export-users', [ExportController::class, 'exportUsers']);
 
 Route::post('/save-review', [RoomController::class, 'storeReview']);
 
+Route::post('/login', [CustomAuthController::class, 'login']);
+Route::post('/refresh', [CustomAuthController::class, 'refresh']);
+Route::post('/logout', [CustomAuthController::class, 'logout'])->name('logout');
+
+
+
+use App\Http\Controllers\PostController;
+
+Route::resource('posts', PostController::class);

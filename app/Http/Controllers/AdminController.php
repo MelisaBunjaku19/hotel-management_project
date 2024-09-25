@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+
 
 
 class AdminController extends Controller
@@ -169,4 +171,7 @@ class AdminController extends Controller
 
         return redirect()->route('admin.show_users')->with('success', 'User deleted successfully.');
     }
+
+
+
 }  

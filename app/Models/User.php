@@ -9,6 +9,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str; // This should be correctly imported
 
 
 class User extends Authenticatable
@@ -25,7 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'usertype'
+        'usertype',
+        'refresh_token', // Ensure this is added here
     ];
 
     /**
@@ -38,6 +40,7 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'refresh_token', // Consider hiding this for security
     ];
 
     /**
@@ -72,8 +75,28 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Blog::class, 'likes')->withTimestamps();
     }
+
+    /**
+     * Generate a new refresh token for the user.
+     *
+     * @return string
+     */
+    public function generateRefreshToken()
+    {
+        $this->refresh_token = Str::random(60); // Generate a random refresh token
+        $this->save();
     
-
-
+        return $this->refresh_token;
+    }
+    
+    /**
+     * Revoke the user's refresh token.
+     *
+     * @return void
+     */
+    public function revokeRefreshToken()
+    {
+        $this->refresh_token = null; // Revoke the refresh token
+        $this->save();
+    }
 }
-
