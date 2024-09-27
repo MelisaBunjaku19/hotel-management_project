@@ -277,6 +277,11 @@ Route::resource('posts', PostController::class);
 
 
 
-Route::get('/{any}', function () {
-    return view('app'); // Ensure this view includes your React app
-})->where('any', '.*');
+// routes/web.php
+Route::get('/hotel-pamphlet', function () {
+    return view('home.hotel_pamphlet'); // Use dot notation for nested views
+})->name('hotel.pamphlet');
+
+Route::get('/app', function () {
+    return view('app'); // this assumes you have a Blade file named app.blade.php
+})->name('app');

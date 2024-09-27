@@ -20,7 +20,7 @@
 <body class="font-sans antialiased">
     <x-banner />
 
-    <div class="">
+    <div>
         @livewire('navigation-menu')
 
         <!-- Page Heading -->
@@ -37,9 +37,10 @@
             @yield('content') <!-- This is where your view content will be injected -->
         </main>
         
-        <!-- React root -->
-        <div id="root"></div> <!-- This is where React will render -->
-
+        <!-- React roots -->
+        <div id="navbar-root"></div> <!-- For Navbar -->
+        <div id="about-root"></div> <!-- For About component -->
+        <div id="hotel-pamphlet-root"></div> <!-- For HotelPamphlet component -->
     </div>
 
     @stack('modals')

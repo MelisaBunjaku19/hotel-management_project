@@ -64,7 +64,7 @@ class Blog extends Model
             // Include any other attributes you want to be searchable
         ];
     
-        \Log::info('Searchable Array:', $array); // Log the array for debugging
+     // Log the array for debugging
     
         return $array;
     }
