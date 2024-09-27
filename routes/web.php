@@ -285,3 +285,8 @@ Route::get('/hotel-pamphlet', function () {
 Route::get('/app', function () {
     return view('app'); // this assumes you have a Blade file named app.blade.php
 })->name('app');
+
+
+Route::get('/destinations', function () {
+    return view('home.destinations');
+})->name('destinations');
