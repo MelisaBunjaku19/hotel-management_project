@@ -1,0 +1,292 @@
+body {
+    background-color: #f4f4f4; /* Light gray background */
+    color: #333; /* Dark text color for contrast */
+    font-family: 'Open Sans', sans-serif; /* Clean and modern font */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.about {
+    padding: 60px 20px; /* Responsive padding */
+    text-align: center;
+}
+
+.about .titlepage h2 {
+    font-size: 42px;
+    color: #212121; /* Darker color for title */
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+.about .titlepage h2:hover {
+    color: #ff6f61; /* Change color on hover */
+    transform: translateY(-5px); /* Slightly move up */
+}
+
+.about .titlepage p {
+    font-size: 18px;
+    color: #666; /* Softer text color */
+    max-width: 800px;
+    margin: 0 auto 30px; /* Centered text with margin */
+    line-height: 1.8;
+    transition: color 0.3s ease; /* Smooth transition */
+}
+
+.about .titlepage p:hover {
+    color: #555; /* Darken color on hover */
+}
+
+.about .titlepage a {
+    display: inline-block;
+    font-size: 16px;
+    color: #fff; /* White text */
+    background: linear-gradient(45deg, #ff6f61, #d84a59); /* Modern gradient background */
+    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: 30px; /* Rounded button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition */
+    margin-top: 20px;
+}
+
+.about .titlepage a:hover {
+    background: linear-gradient(45deg, #d84a59, #ff6f61); /* Inverted gradient on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Darker shadow on hover */
+    transform: translateY(-3px); /* Slightly move up on hover */
+}
+
+.about .about_img img {
+    width: 100%;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    margin-top: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.about .about_img img:hover {
+    transform: scale(1.05); /* Zoom in on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+}
+
+.about .more-info {
+    display: none; /* Hidden by default */
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.about .more-info .info-item {
+    background-color: #fff; /* White background */
+    border-radius: 20px; /* Rounded corners with larger radius */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: left; /* Left-aligned text for readability */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    position: relative; /* For pseudo-element positioning */
+    overflow: hidden; /* Ensure rounded corners apply to content */
+}
+
+.about .more-info .info-item:hover {
+    transform: translateY(-10px); /* Move up on hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+}
+
+.about .more-info .info-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05)); /* Gradient overlay */
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.about .more-info h3 {
+    font-size: 26px;
+    color: #212121; /* Dark text for titles */
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-family: 'Roboto', sans-serif; /* Better font for headers */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+.about .more-info h3:hover {
+    color: #ff6f61; /* Change color on hover */
+    transform: translateY(-3px); /* Slightly move up on hover */
+}
+
+.about .more-info p {
+    font-size: 18px;
+    color: #555; /* Softer text color */
+    line-height: 1.7;
+    font-family: 'Open Sans', sans-serif; /* Better font for paragraphs */
+    margin-bottom: 20px;
+}
+
+.about .more-info a.btn-primary {
+    background-color: #ff6f61; /* Primary button color */
+    border-color: #ff6f61;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    position: relative; /* For pseudo-element positioning */
+    overflow: hidden; /* Ensure rounded corners apply to button */
+}
+
+.about .more-info a.btn-primary:hover {
+    background-color: #d84a59; /* Darker color on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+.header {
+    background: #333; /* Dark gray background */
+    color: white; /* Light gray text */
+    padding: 15px 0;
+    border-bottom: 2px solid #444; /* Slightly lighter gray border */
+}
+
+.footer {
+    background: #333; /* Dark gray background */
+    color: #f5f5f5; /* Light gray text */
+    padding: 40px 0;
+    text-align: center;
+    border-top: 2px solid #444; /* Slightly lighter gray border */
+}
+/* FAQ section */
+.faq {
+        background: #fff; /* White background for FAQ section */
+        padding: 40px 20px; /* Padding for the FAQ section */
+        border-radius: 15px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        margin-top: 50px;
+    }
+
+    .faq h2 {
+        font-size: 36px;
+        color: #ff6f61; /* Accent color for FAQ section */
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+
+    .faq-item {
+        margin-bottom: 20px;
+    }
+
+    .faq-question {
+        background: #f8f9fa; /* Light gray background */
+        border: none;
+        border-radius: 10px;
+        color: #333; /* Dark text color */
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        padding: 15px;
+        width: 100%;
+        text-align: left;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .faq-question:hover {
+        background: #ff6f61; /* Accent color on hover */
+        color: #fff; /* White text on hover */
+    }
+
+    .faq-answer {
+        display: none; /* Hidden by default */
+        padding: 15px;
+        background: #f1f1f1; /* Light background for answers */
+        border-radius: 10px;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .faq-answer p {
+        margin: 0;
+    }
+
+    .header {
+        background: #333; /* Dark gray background */
+        color: white; /* Light gray text */
+        padding: 15px 0;
+        border-bottom: 2px solid #444; /* Slightly lighter gray border */
+    }
+    .flashcards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.flashcard {
+    width: 320px; /* Increased width for a wider card */
+    height: 400px; /* Increased height for a taller card */
+    perspective: 1000px;
+    margin: 0 10px; /* Side margin for spacing */
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flashcard:hover .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    overflow: hidden; /* Ensure images fit nicely */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px; /* Padding for text */
+}
+
+.flashcard-front {
+    background-color: #fff; /* Front background color */
+}
+
+.flashcard-back {
+    background-color: #f0f0f0; /* Back background color */
+    transform: rotateY(180deg); /* Back is initially rotated */
+    padding: 20px; /* Padding for better text spacing */
+    display: flex;
+    flex-direction: column; /* Stack text vertically */
+}
+
+.flashcard-image {
+    width: 100%;
+    height: 75%; /* Adjusted height for images to fit the new size */
+    object-fit: cover; /* Ensures the image covers the area */
+}
+
+.flashcard-back h3 {
+    margin: 0;
+    font-size: 1.5rem; /* Larger heading font */
+    font-weight: bold; /* Bold for emphasis */
+}
+
+.flashcard-back p {
+    font-size: 1rem; /* Standard paragraph size */
+    line-height: 1.5; /* Improved line spacing for readability */
+    color: #555; /* Darker text color for contrast */
+}

@@ -82,6 +82,9 @@
             </div>
         </div>
     </div>
+    <div id="navbar-root"></div> <!-- React component will render here -->
 </header>
 <!-- end header inner -->
 <!-- end header -->
+
+<script src="{{ mix('js/app.js') }}"></script> <!-- Adjust the path according to your setup -->

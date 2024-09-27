@@ -17,39 +17,34 @@ class BlogController extends Controller
     $sortBy = $request->input('sortBy');
 
     // Start building the query for blogs
-    $query = Blog::with('category', 'likes');
+    $query = Blog::with('category', 'likes'); // Include related models
 
-    // Filter by search query if provided
+    // Search by title
     if ($searchQuery) {
-        $query->where('title', 'LIKE', "%{$searchQuery}%");
+        $query->where('title', 'like', '%' . $searchQuery . '%');
     }
 
-    // Filter by category if provided
+    // Filter by category
     if ($category) {
         $query->where('category_id', $category);
     }
 
-    // Handle sorting
-    if ($sortBy === 'most_liked') {
-        // Sort by most liked
+    // Sorting based on user input
+    if ($sortBy == 'most_liked') {
         $query->withCount('likes')->orderBy('likes_count', 'desc');
-    } elseif ($sortBy === 'created_at') {
-        // Sort by newest
+    } elseif ($sortBy == 'created_at') {
         $query->orderBy('created_at', 'desc');
     } else {
-        // Unordered: Don't apply any specific sorting
-        $query->inRandomOrder(); // Or leave it as is for unordered display
+        $query->orderBy('id', 'asc'); // Default sort
     }
 
-    // Fetch the blogs
-    $blogs = $query->get();
+    // Get all blogs with simple pagination
+    $blogs = $query->simplePaginate(6); // Adjust the number per page as needed
+    $categories = Category::all(); // Fetch all categories for the filter
 
-    // Fetch categories for the filter dropdown
-    $categories = Category::all();
-
-    // Return view with the blogs and categories
     return view('home.blog', compact('blogs', 'categories'));
 }
+
 
     public function toggleLike(Blog $blog)
     {

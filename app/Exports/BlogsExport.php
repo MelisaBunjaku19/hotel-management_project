@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Response;
 class BlogsExport
 {
     /**
-     * Export blogs as Excel.
+     * Export blogs as Excel with optional sorting.
      *
+     * @param string|null $sortField
+     * @param string|null $sortDirection
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadExcel()
+    public function downloadExcel($sortField = null, $sortDirection = 'asc')
     {
-        $spreadsheet = $this->createSpreadsheet();
+        $spreadsheet = $this->createSpreadsheet($sortField, $sortDirection);
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
 
         $filename = 'blogs_export_' . date('Ymd_His') . '.xlsx';
@@ -25,11 +27,13 @@ class BlogsExport
     }
 
     /**
-     * Export blogs as CSV.
+     * Export blogs as CSV with optional sorting.
      *
+     * @param string|null $sortField
+     * @param string|null $sortDirection
      * @return \Illuminate\Http\Response
      */
-    public function downloadCsv()
+    public function downloadCsv($sortField = null, $sortDirection = 'asc')
     {
         $filename = 'blogs_export_' . date('Ymd_His') . '.csv';
         $filePath = storage_path('app/' . $filename);
@@ -40,8 +44,11 @@ class BlogsExport
         // Add CSV headers
         fputcsv($file, ['ID', 'Title', 'Category', 'Author', 'Created At']);
 
-        // Fetch blog data and write to CSV
-        $blogs = Blog::with('category', 'author')->get();
+        // Fetch blog data and write to CSV with sorting
+        $blogs = Blog::with('category', 'author')
+            ->orderBy($sortField ?? 'id', $sortDirection)
+            ->get();
+
         foreach ($blogs as $blog) {
             $category = $blog->category->name ?? 'N/A';
             $author = $blog->author->name ?? 'N/A';
@@ -54,26 +61,32 @@ class BlogsExport
 
         return Response::download($filePath)->deleteFileAfterSend(true);
     }
+
     /**
-     * Export blogs as JSON.
+     * Export blogs as JSON with optional sorting.
      *
+     * @param string|null $sortField
+     * @param string|null $sortDirection
      * @return \Illuminate\Http\Response
      */
-    public function downloadJson()
+    public function downloadJson($sortField = null, $sortDirection = 'asc')
     {
         $filename = 'blogs_export_' . date('Ymd_His') . '.json';
         $filePath = storage_path('app/' . $filename);
 
-        // Fetch blog data
-        $blogs = Blog::with('category', 'author')->get()->map(function ($blog) {
-            return [
-                'ID' => $blog->id,
-                'Title' => $blog->title,
-                'Category' => $blog->category->name ?? 'N/A',
-                'Author' => $blog->author->name ?? 'N/A',
-                'Created At' => $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A'
-            ];
-        });
+        // Fetch blog data with sorting
+        $blogs = Blog::with('category', 'author')
+            ->orderBy($sortField ?? 'id', $sortDirection)
+            ->get()
+            ->map(function ($blog) {
+                return [
+                    'ID' => $blog->id,
+                    'Title' => $blog->title,
+                    'Category' => $blog->category->name ?? 'N/A',
+                    'Author' => $blog->author->name ?? 'N/A',
+                    'Created At' => $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A'
+                ];
+            });
 
         // Write JSON to file
         file_put_contents($filePath, $blogs->toJson(JSON_PRETTY_PRINT));
@@ -82,11 +95,13 @@ class BlogsExport
     }
 
     /**
-     * Create a Spreadsheet object for Excel export.
+     * Create a Spreadsheet object for Excel export with optional sorting.
      *
+     * @param string|null $sortField
+     * @param string|null $sortDirection
      * @return \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
-    private function createSpreadsheet()
+    private function createSpreadsheet($sortField = null, $sortDirection = 'asc')
     {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -98,8 +113,10 @@ class BlogsExport
         $sheet->setCellValue('D1', 'Author');
         $sheet->setCellValue('E1', 'Created At');
 
-        // Fetch blog data and fill spreadsheet
-        $blogs = Blog::with('category', 'author')->get();
+        // Fetch blog data and fill spreadsheet with sorting
+        $blogs = Blog::with('category', 'author')
+            ->orderBy($sortField ?? 'id', $sortDirection)
+            ->get();
         $row = 2;
 
         foreach ($blogs as $blog) {

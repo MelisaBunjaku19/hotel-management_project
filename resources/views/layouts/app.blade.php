@@ -12,7 +12,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js']) <!-- Laravel Mix or Vite -->
 
     <!-- Styles -->
     @livewireStyles
@@ -34,8 +34,12 @@
 
         <!-- Page Content -->
         <main>
-            @yield('content')  <!-- This is where your view content will be injected -->
+            @yield('content') <!-- This is where your view content will be injected -->
         </main>
+        
+        <!-- React root -->
+        <div id="root"></div> <!-- This is where React will render -->
+
     </div>
 
     @stack('modals')

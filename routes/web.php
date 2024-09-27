@@ -274,3 +274,9 @@ Route::post('/logout', [CustomAuthController::class, 'logout'])->name('logout');
 use App\Http\Controllers\PostController;
 
 Route::resource('posts', PostController::class);
+
+
+
+Route::get('/{any}', function () {
+    return view('app'); // Ensure this view includes your React app
+})->where('any', '.*');

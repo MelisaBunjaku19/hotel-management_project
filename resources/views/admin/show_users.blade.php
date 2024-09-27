@@ -96,33 +96,34 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($users as $user)
-                                            <tr>
-                                                <td>{{ $user->id }}</td>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ $user->phone ?? 'N/A' }}</td> <!-- Display phone number -->
-                                                <td>{{ $user->usertype }}</td>
-                                                <td>
-                                                    @if($user->created_at)
-                                                        {{ $user->created_at->format('d-m-Y') }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('admin.edit_user', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 5px;">Edit</a>
-                                                        <form action="{{ route('admin.delete_user', $user->id) }}" method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
+    @foreach($users as $user)
+        <tr>
+            <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td> <!-- Calculate sequential ID -->
+            <td>{{ $user->name }}</td>
+            <td>{{ $user->email }}</td>
+            <td>{{ $user->phone ?? 'N/A' }}</td>
+            <td>{{ $user->usertype }}</td>
+            <td>
+                @if($user->created_at)
+                    {{ $user->created_at->format('d-m-Y') }}
+                @else
+                    N/A
+                @endif
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="{{ route('admin.edit_user', $user->id) }}" class="btn btn-warning btn-sm" style="margin-right: 5px;">Edit</a>
+                    <form action="{{ route('admin.delete_user', $user->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                                 </table>
 
                                 <!-- Pagination Links -->

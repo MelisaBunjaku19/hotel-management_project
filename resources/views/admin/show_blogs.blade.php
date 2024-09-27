@@ -90,45 +90,46 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($blogs as $blog)
-                                        <tr>
-                                            <td>{{ $blog->id }}</td>
-                                            <td>{{ $blog->title }}</td>
-                                            <td>
-                                                @if($blog->category)
-                                                    {{ $blog->category->name }}
-                                                @else
-                                                    N/A
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if(is_string($blog->author))
-                                                    {{ json_decode($blog->author)->name ?? 'N/A' }}
-                                                @else
-                                                    {{ $blog->author->name ?? 'N/A' }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($blog->created_at)
-                                                    {{ $blog->created_at->format('d-m-Y') }}
-                                                @else
-                                                    N/A
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-info btn-sm" style="margin-right: 5px;">View</a>
-                                                    <a href="{{ route('admin.edit_blog', $blog->id) }}" class="btn btn-warning btn-sm" style="margin-right: 5px;">Edit</a>
-                                                    <form action="{{ route('admin.delete_blog', $blog->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
+    @foreach($blogs as $index => $blog)
+        <tr>
+            <td>{{ ($blogs->currentPage() - 1) * $blogs->perPage() + $index + 1 }}</td> <!-- Dynamic ID Calculation -->
+            <td>{{ $blog->title }}</td>
+            <td>
+                @if($blog->category)
+                    {{ $blog->category->name }}
+                @else
+                    N/A
+                @endif
+            </td>
+            <td>
+                @if(is_string($blog->author))
+                    {{ json_decode($blog->author)->name ?? 'N/A' }}
+                @else
+                    {{ $blog->author->name ?? 'N/A' }}
+                @endif
+            </td>
+            <td>
+                @if($blog->created_at)
+                    {{ $blog->created_at->format('d-m-Y') }}
+                @else
+                    N/A
+                @endif
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-info btn-sm" style="margin-right: 5px;">View</a>
+                    <a href="{{ route('admin.edit_blog', $blog->id) }}" class="btn btn-warning btn-sm" style="margin-right: 5px;">Edit</a>
+                    <form action="{{ route('admin.delete_blog', $blog->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                             </table>
 
                             <!-- Pagination Links -->

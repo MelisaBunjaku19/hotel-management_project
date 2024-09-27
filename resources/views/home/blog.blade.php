@@ -15,11 +15,19 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
     @php
-    function highlight($text, $search) {
-        if (!$search) return $text;
-        return preg_replace('/(' . preg_quote($search, '/') . ')/iu', '<span class="highlight">$1</span>', $text);
+function highlight($text, $searchQuery) {
+    if (!$searchQuery) {
+        return $text;
     }
+
+    // Escape special characters from the search query
+    $escapedSearch = preg_quote($searchQuery, '/');
+    
+    // Match the whole word, adding word boundaries using \b
+    return preg_replace('/\b(' . $escapedSearch . ')\b/iu', '<span class="highlight">$1</span>', $text);
+}
 @endphp
+
     <style>
         /* Custom styles for the blog page */
         .blog .titlepage h2 {
@@ -141,6 +149,37 @@
 .like-count i:hover {
     color: darkred; /* Change color on hover */
 }
+.highlight {
+    background-color: yellow; /* Highlight background */
+    font-weight: bold;        /* Bold font to make it stand out */
+}
+
+.pagination {
+        justify-content: center; /* Center pagination */
+        margin: 20px 0; /* Margin above and below */
+    }
+    .pagination .page-item {
+        margin: 0 2px; /* Reduced space between pagination items */
+    }
+    .pagination .page-link {
+        padding: 5px 8px; /* Smaller padding */
+        font-size: 12px; /* Smaller font size */
+        border-radius: 5px; /* Rounded corners */
+        background-color: #343a40; /* Background color for links */
+        color: white; /* Text color */
+    }
+    .pagination .page-link:hover {
+        background-color: #495057; /* Darker background on hover */
+        color: white; /* Keep text color white on hover */
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #007bff; /* Active page background color */
+        color: white; /* Active page text color */
+        border: none; /* Remove border for active link */
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d; /* Disabled link color */
+    }
 
 
     </style>
@@ -226,10 +265,14 @@
         </div>
     @endforelse
 </div>
-
+<div class="d-flex justify-content-center">
+            {{ $blogs->links('pagination::bootstrap-4', ['prevText' => 'Previous', 'nextText' => 'Next']) }}
+        </div>
 
         </div>
     </div>
+
+
 
     <!-- Footer -->
     @include('home.footer')

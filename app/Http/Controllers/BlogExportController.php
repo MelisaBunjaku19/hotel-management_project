@@ -10,33 +10,45 @@ class BlogExportController extends Controller
     /**
      * Export blogs as Excel.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function exportBlogs()
+    public function exportBlogs(Request $request)
     {
+        $sortField = $request->query('sort', 'id'); // Default sort field
+        $sortDirection = $request->query('direction', 'asc'); // Default sort direction
+
         $export = new BlogsExport();
-        return $export->downloadExcel();
+        return $export->downloadExcel($sortField, $sortDirection);
     }
 
     /**
      * Export blogs as CSV.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function exportBlogsCsv()
+    public function exportBlogsCsv(Request $request)
     {
+        $sortField = $request->query('sort', 'id'); // Default sort field
+        $sortDirection = $request->query('direction', 'asc'); // Default sort direction
+
         $export = new BlogsExport();
-        return $export->downloadCsv();
+        return $export->downloadCsv($sortField, $sortDirection);
     }
 
     /**
      * Export blogs as JSON.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function exportBlogsJson()
+    public function exportBlogsJson(Request $request)
     {
+        $sortField = $request->query('sort', 'id'); // Default sort field
+        $sortDirection = $request->query('direction', 'asc'); // Default sort direction
+
         $export = new BlogsExport();
-        return $export->downloadJson();
+        return $export->downloadJson($sortField, $sortDirection);
     }
 }
