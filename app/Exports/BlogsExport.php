@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Blog;
 use Illuminate\Support\Facades\Response;
+use App\Models\User;
 
 class BlogsExport
 {
@@ -49,12 +50,13 @@ class BlogsExport
             ->orderBy($sortField ?? 'id', $sortDirection)
             ->get();
 
-        foreach ($blogs as $blog) {
-            $category = $blog->category->name ?? 'N/A';
-            $author = $blog->author->name ?? 'N/A';
-            $createdAt = $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A';
-            fputcsv($file, [$blog->id, $blog->title, $category, $author, $createdAt]);
-        }
+            foreach ($blogs as $blog) {
+                $category = $blog->category->name ?? 'N/A';
+                $author = $blog->author ? $blog->author->name : 'N/A'; // Adjust this line
+                $createdAt = $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A';
+                fputcsv($file, [$blog->id, $blog->title, $category, $author, $createdAt]);
+            }
+            
 
         // Close the CSV file
         fclose($file);

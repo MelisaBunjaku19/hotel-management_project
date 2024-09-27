@@ -188,35 +188,40 @@ class BlogController extends Controller
     }
 
     // Store a new blog post
-    public function store(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'content' => 'required|string',
-            'excerpt' => 'required|string',
-            'category_id' => 'required|exists:categories,id' // Validate category_id
-        ]);
+  // Store a new blog post
+public function store(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'content' => 'required|string',
+        'excerpt' => 'required|string',
+        'category_id' => 'required|exists:categories,id' // Validate category_id
+    ]);
 
-        // Create a new blog instance
-        $blog = new Blog();
-        $blog->title = $request->input('title');
-        $blog->content = $request->input('content');
-        $blog->excerpt = $request->input('excerpt');
-        $blog->category_id = $request->input('category_id'); // Set the category_id
+    // Create a new blog instance
+    $blog = new Blog();
+    $blog->title = $request->input('title');
+    $blog->content = $request->input('content');
+    $blog->excerpt = $request->input('excerpt');
+    $blog->category_id = $request->input('category_id'); // Set the category_id
 
-        // Handle the image upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $filename);
-            $blog->image = $filename;
-        }
+    // Set the user_id to the currently logged-in user's ID
+    $blog->user_id = auth()->id(); // Set user_id
 
-        // Save the blog
-        $blog->save();
-
-        return redirect()->route('admin.show_blogs')->with('success', 'Blog created successfully!');
+    // Handle the image upload
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $filename);
+        $blog->image = $filename;
     }
+
+    // Save the blog
+    $blog->save();
+
+    return redirect()->route('admin.show_blogs')->with('success', 'Blog created successfully!');
+}
+
 }
