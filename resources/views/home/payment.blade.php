@@ -19,111 +19,112 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <style>
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            font-family: 'Poppins', sans-serif;
-        }
-        .container {
-            max-width: 800px;
-            margin-top: 40px;
-            padding: 20px;
-        }
-        .titlepage {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .titlepage h2 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .titlepage p {
-            font-size: 18px;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-        .titlepage a {
-            display: inline-block;
-            font-size: 16px;
-            color: #fff;
-            background: linear-gradient(45deg, #ff6f61, #d84a59);
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        .titlepage a:hover {
-            background: linear-gradient(45deg, #d84a59, #ff6f61);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            background-color: #fff;
-            overflow: hidden;
-        }
-        .card-img-top {
-            height: 250px;
-            object-fit: cover;
-        }
-        .card-body {
-            padding: 20px;
-        }
-        .card-title {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .card-text {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-        }
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-shadow: none;
-            padding: 10px 15px;
-            font-size: 16px;
-        }
-        .btn-submit-container {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .btn-primary {
-            background-color: #ff6f61;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #e65b53;
-        }
-        .btn-primary:disabled {
-            background-color: #ccc;
-        }
+    body {
+    background-color: #f5f5f5;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto; /* Center the container */
+    padding: 20px;
+    background-color: #fff; /* White background for the form */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+.titlepage {
+    text-align: center;
+    margin-bottom: 30px; /* Less space below title */
+}
+
+.titlepage h2 {
+    font-size: 28px; /* Slightly smaller heading */
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.titlepage p {
+    font-size: 16px; /* Slightly smaller text */
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.5; /* Tighter line height */
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px; /* Reduced padding */
+}
+
+.card-title {
+    font-size: 20px; /* Slightly smaller title */
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 14px; /* Slightly smaller text */
+    color: #555;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.btn-submit-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-primary {
+    background-color: #ff6f61; /* Primary color */
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for button */
+}
+
+.btn-primary:hover {
+    background-color: #e65b53;
+}
+
+.btn-primary:disabled {
+    background-color: #ccc;
+}
+
     </style>
 </head>
 <body>

@@ -99,4 +99,9 @@ class User extends Authenticatable
         $this->refresh_token = null; // Revoke the refresh token
         $this->save();
     }
+
+    public function routeNotificationForMail($notification)
+{
+    return $this->email; // This specifies to use the user's email for mail notifications.
+}
 }

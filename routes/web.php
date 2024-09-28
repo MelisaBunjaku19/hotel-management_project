@@ -290,3 +290,4 @@ Route::get('/app', function () {
 Route::get('/destinations', function () {
     return view('home.destinations');
 })->name('destinations');
+

@@ -73,45 +73,14 @@
             background-color: #c82333;
             transform: scale(1.05);
         }
-        /* Message and modal button enhancements */
-        .alert-success {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            font-size: 1rem;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
-            position: relative;
-            top: 20px;
-            z-index: 999;
+        /* Rating stars */
+        .star {
+            cursor: pointer;
+            font-size: 20px;
+            color: #ccc;
         }
-
-        /* Fade out animation */
-        .alert-success.fade-out {
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .modal-footer .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .modal-footer .btn-secondary:hover {
-            background-color: #5a6268;
-            transform: scale(1.05);
-        }
-        .modal-footer .btn-danger {
-            background-color: #dc3545;
-            border: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .modal-footer .btn-danger:hover {
-            background-color: #c82333;
-            transform: scale(1.05);
+        .star.selected {
+            color: #f39c12;
         }
     </style>
 </head>
@@ -187,32 +156,96 @@
     </div>
 </div>
 
+<!-- Success Confirmation Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Booking Canceled</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your booking has been canceled successfully!</p>
+                <p>Please rate your booking experience:</p>
+                <div>
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+                <input type="hidden" id="userRating" name="user_rating" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="submitRating" class="btn btn-primary">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @include('home.footer')
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
 <script>
-    $('#cancelModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var bookingId = button.data('id');
-        var roomTitle = button.data('room');
-
-        var modal = $(this);
-        modal.find('#roomTitle').text(roomTitle);
-        modal.find('#bookingId').val(bookingId);
-    });
-
     $(document).ready(function() {
-        setTimeout(function() {
-            $('#successMessage').addClass('fade-out');
-        }, 5000);
+        // Handle the cancel button click
+        $('#cancelModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var bookingId = button.data('id'); // Extract info from data-* attributes
+            var roomTitle = button.data('room'); // Room title
 
-        setTimeout(function() {
-            $('#successMessage').remove();
-        }, 6000);
+            var modal = $(this);
+            modal.find('#roomTitle').text(roomTitle);
+            modal.find('#bookingId').val(bookingId);
+        });
+
+        // Handle the successful cancellation to show success modal
+        $('#cancelForm').on('submit', function(event) {
+            event.preventDefault();
+            var bookingId = $('#bookingId').val();
+
+            // Ajax request to cancel the booking
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#cancelModal').modal('hide'); // Hide the cancel modal
+                    $('#successModal').modal('show'); // Show the success modal
+                },
+                error: function(xhr) {
+                    alert('An error occurred while canceling the booking. Please try again.');
+                }
+            });
+        });
+
+        // Handle rating stars click
+        $('.star').on('click', function() {
+            var rating = $(this).data('value');
+            $('#userRating').val(rating);
+            $('.star').removeClass('selected'); // Clear previous selection
+            $(this).addClass('selected'); // Highlight the selected star
+            $(this).prevAll().addClass('selected'); // Highlight previous stars
+        });
+
+        // Handle the submit rating button
+        $('#submitRating').on('click', function() {
+            var rating = $('#userRating').val();
+            if (rating) {
+                // Here you can send the rating to the server using AJAX if needed
+                // $.post('your_rating_endpoint', { rating: rating });
+                // After submitting the rating, redirect to the rooms page
+                window.location.href = "{{ route('rooms.index') }}"; // Adjust the route as needed
+            } else {
+                alert('Please select a rating before submitting.');
+            }
+        });
     });
 </script>
-
 </body>
 </html>
