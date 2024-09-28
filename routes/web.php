@@ -291,3 +291,6 @@ Route::get('/destinations', function () {
     return view('home.destinations');
 })->name('destinations');
 
+
+
+Route::post('/subscribe', [App\Http\Controllers\SubscriberController::class, 'store'])->name('subscribe');
