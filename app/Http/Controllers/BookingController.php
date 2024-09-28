@@ -204,5 +204,7 @@ class BookingController extends Controller
         // Redirect with a success message
         return redirect()->route('rooms.index')->with('success', 'Booking has been canceled successfully.');
     }
+
+    
     
 }

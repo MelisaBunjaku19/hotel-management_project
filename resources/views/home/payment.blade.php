@@ -19,111 +19,114 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <style>
-    body {
-    background-color: #f5f5f5;
-    color: #333;
-    font-family: 'Poppins', sans-serif;
-}
-
-.container {
-    max-width: 800px;
-    margin: 40px auto; /* Center the container */
-    padding: 20px;
-    background-color: #fff; /* White background for the form */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-}
-
-.titlepage {
-    text-align: center;
-    margin-bottom: 30px; /* Less space below title */
-}
-
-.titlepage h2 {
-    font-size: 28px; /* Slightly smaller heading */
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.titlepage p {
-    font-size: 16px; /* Slightly smaller text */
-    color: #666;
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.5; /* Tighter line height */
-}
-
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    overflow: hidden;
-}
-
-.card-img-top {
-    height: 250px;
-    object-fit: cover;
-}
-
-.card-body {
-    padding: 15px; /* Reduced padding */
-}
-
-.card-title {
-    font-size: 20px; /* Slightly smaller title */
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-.card-text {
-    font-size: 14px; /* Slightly smaller text */
-    color: #555;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-control {
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-shadow: none;
-    padding: 10px 15px;
-    font-size: 16px;
-}
-
-.btn-submit-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.btn-primary {
-    background-color: #ff6f61; /* Primary color */
-    border: none;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #fff;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for button */
-}
-
-.btn-primary:hover {
-    background-color: #e65b53;
-}
-
-.btn-primary:disabled {
-    background-color: #ccc;
-}
+     body {
+            background-color: #e9ecef; /* Light gray background */
+            color: #343a40; /* Dark gray text */
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 60px;
+            padding: 30px;
+            background-color: #ffffff; /* White background for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+        .titlepage {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .titlepage h2 {
+            font-size: 36px; /* Increased title size */
+            font-weight: 700;
+            color: #ff6f61; /* Accent color */
+            margin-bottom: 10px;
+        }
+        .titlepage p {
+            font-size: 18px;
+            color: #6c757d; /* Secondary gray color */
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .titlepage a {
+            display: inline-block;
+            font-size: 16px;
+            color: #fff;
+            background: linear-gradient(45deg, #ff6f61, #d84a59);
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .titlepage a:hover {
+            background: linear-gradient(45deg, #d84a59, #ff6f61);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            background-color: #f8f9fa; /* Light card background */
+            overflow: hidden;
+        }
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 24px; /* Increased card title size */
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+        .card-text {
+            font-size: 16px;
+            color: #495057; /* Medium gray color */
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #343a40;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da; /* Light gray border */
+            box-shadow: none;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+        .btn-submit-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn-primary {
+            background-color: #ff6f61;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #e65b53;
+        }
+        .btn-primary:disabled {
+            background-color: #ccc;
+        }
 
     </style>
 </head>
@@ -168,7 +171,7 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        var stripe = Stripe('pk_test_51PsAoEInW0Dbu067ayd1POjtVJcOYZutsLJxMaT8j497hwHR1kIA82yZ8kWSU5n8witREQkW9x2cRBwzZGa0Y46400IGcJLwjj');
+        var stripe = Stripe('pk_test_51PsAoEInW0Dbu067xrOlHsBEXj57WxROzcNgmUpP0LMAcfXXkmWNOUPUnrGHe9BvZL0yHfBqJW6BMBXz5CUFm0Ku001dWR5lpw');
 
         document.getElementById('payment-form').addEventListener('submit', function(e) {
             e.preventDefault();
