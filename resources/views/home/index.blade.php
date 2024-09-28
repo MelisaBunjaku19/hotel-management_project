@@ -287,6 +287,31 @@
   </div>
 </section>
 
+
+
+<!-- Additional Carousel Section -->
+<section class="featured-blogs text-center">
+  <div class="container">
+    <h2 class="text-center mb-4">Explore More</h2>
+    <div class="row justify-content-center">
+      <!-- Centered View Blogs -->
+      <div class="col-md-6 mb-4">
+        <div class="blog-item">
+          <img src="{{ asset('images/blogimage.jpg') }}" alt="Read Blogs" class="img-fluid">
+          <div class="blog-info">
+            <h3>Read Our Latest Blogs</h3>
+            <p>Stay updated with our latest news and offers.</p>
+            <a href="{{ route('blog.index') }}" class="btn btn-primary">View Blogs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
 <!-- Add this to the styles -->
 <style>
   .featured-rooms {
@@ -352,6 +377,65 @@
   }
 
   .room-info .btn-primary:hover {
+    background-color: #e94e3a; /* Darker accent color on hover */
+  }
+  .featured-blogs {
+    background: #444; /* Slightly lighter dark gray for better contrast */
+    color: #f5f5f5; /* Light gray text */
+    padding: 60px 0;
+  }
+
+  .featured-blogs h2 {
+    font-size: 40px;
+    color: #f5f5f5; /* Light gray */
+    line-height: 45px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .blog-item {
+    background-color: #555; /* Medium gray background */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .blog-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .blog-info {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .blog-info h3 {
+    font-size: 24px;
+    color: #f5f5f5; /* Light gray */
+    margin-bottom: 10px;
+  }
+
+  .blog-info p {
+    margin-bottom: 20px;
+  }
+
+  .blog-info .btn-primary {
+    background-color: #ff5733; /* Accent color */
+    border-color: #ff5733;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .blog-info .btn-primary:hover {
     background-color: #e94e3a; /* Darker accent color on hover */
   }
 </style>
