@@ -44,7 +44,8 @@
                     <ul class="link_menu">
                         <li><a href="destinations">Destinations</a></li>
                         <li><a href="hotel-pamphlet">Hotel Pamphlet</a></li>
-                    </ul>
+                        <li><a href="testimonials">Our user testimonials!</a></li>
+                      </ul>
                 </div>
             </div>
         </div>
