@@ -97,7 +97,8 @@ class BlogController extends Controller
     {
         $sortField = $request->input('sort', 'id'); // Default to sorting by ID
         $sortDirection = $request->input('direction', 'asc'); // Default to ascending order
-
+        $categoryId = $request->input('category_id'); // Get the selected category ID
+    
         // Validate sort field and direction
         $validSortFields = ['id', 'title', 'created_at'];
         if (!in_array($sortField, $validSortFields)) {
@@ -106,15 +107,23 @@ class BlogController extends Controller
         if (!in_array($sortDirection, ['asc', 'desc'])) {
             $sortDirection = 'asc'; // Default to ascending if invalid direction
         }
-
-        // Fetch and sort blogs with pagination
-        $blogs = Blog::with('category') // Eager load category
-                     ->orderBy($sortField, $sortDirection)
-                     ->paginate(10); // Adjust pagination size as needed
-
-        return view('admin.show_blogs', compact('blogs', 'sortField', 'sortDirection'));
+    
+        // Fetch and sort blogs with pagination, filtered by category if provided
+        $query = Blog::with('category'); // Eager load category
+    
+        if ($categoryId) {
+            $query->where('category_id', $categoryId); // Filter by category
+        }
+    
+        $blogs = $query->orderBy($sortField, $sortDirection)
+                       ->paginate(10); // Adjust pagination size as needed
+    
+        // Get all categories for the filter dropdown
+        $categories = Category::all();
+    
+        return view('admin.show_blogs', compact('blogs', 'sortField', 'sortDirection', 'categories'));
     }
-
+    
     // Show the form to edit a blog post
     public function edit($id)
     {

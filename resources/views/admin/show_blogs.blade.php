@@ -45,7 +45,7 @@
             </a>
         </div>
 
-        <!-- Sorting Form -->
+        <!-- Filtering Form -->
         <form method="GET" action="{{ route('admin.show_blogs') }}" class="mb-3">
             <div class="form-row align-items-center">
                 <div class="col-auto">
@@ -61,7 +61,17 @@
                     </select>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Sort</button>
+                    <select name="category_id" class="form-control">
+                        <option value="">Select Category</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Filter</button>
                 </div>
                 <div class="col-auto">
                     <a href="{{ route('admin.show_blogs') }}" class="btn btn-secondary">Reset</a>
@@ -83,58 +93,39 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Title</th>
-                                        <th>Category</th> <!-- New Column for Category -->
+                                        <th>Category</th>
                                         <th>Author</th>
                                         <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-    @foreach($blogs as $index => $blog)
-        <tr>
-            <td>{{ ($blogs->currentPage() - 1) * $blogs->perPage() + $index + 1 }}</td> <!-- Dynamic ID Calculation -->
-            <td>{{ $blog->title }}</td>
-            <td>
-                @if($blog->category)
-                    {{ $blog->category->name }}
-                @else
-                    N/A
-                @endif
-            </td>
-            <td>
-                @if(is_string($blog->author))
-                    {{ json_decode($blog->author)->name ?? 'N/A' }}
-                @else
-                    {{ $blog->author->name ?? 'N/A' }}
-                @endif
-            </td>
-            <td>
-                @if($blog->created_at)
-                    {{ $blog->created_at->format('d-m-Y') }}
-                @else
-                    N/A
-                @endif
-            </td>
-            <td>
-                <div class="btn-group" role="group">
-                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-info btn-sm" style="margin-right: 5px;">View</a>
-                    <a href="{{ route('admin.edit_blog', $blog->id) }}" class="btn btn-warning btn-sm" style="margin-right: 5px;">Edit</a>
-                    <form action="{{ route('admin.delete_blog', $blog->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    @endforeach
-</tbody>
-
+                                    @foreach($blogs as $index => $blog)
+                                        <tr>
+                                            <td>{{ ($blogs->currentPage() - 1) * $blogs->perPage() + $index + 1 }}</td>
+                                            <td>{{ $blog->title }}</td>
+                                            <td>{{ $blog->category ? $blog->category->name : 'N/A' }}</td>
+                                            <td>{{ $blog->author->name ?? 'N/A' }}</td>
+                                            <td>{{ $blog->created_at ? $blog->created_at->format('d-m-Y') : 'N/A' }}</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-info btn-sm">View</a>
+                                                    <a href="{{ route('admin.edit_blog', $blog->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                    <form action="{{ route('admin.delete_blog', $blog->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
                             </table>
 
                             <!-- Pagination Links -->
                             <div class="pagination justify-content-center">
-                                {{ $blogs->appends(['sort' => $sortField, 'direction' => $sortDirection])->links() }}
+                                {{ $blogs->appends(['sort' => $sortField, 'direction' => $sortDirection, 'category_id' => request('category_id')])->links() }}
                             </div>
                         </div>
                     </div>
