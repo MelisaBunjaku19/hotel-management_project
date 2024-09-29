@@ -47,6 +47,7 @@
                         <li><a href="testimonials">Testimonials</a></li>
                         <li><a href="help">Help</a></li>
                         <li><a href="terms">Terms of Service</a></li>
+                        <li><a href="feedback">Feedback Form</a></li>
                     </ul>
                 </div>
             </div>

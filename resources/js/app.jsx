@@ -10,9 +10,10 @@ import Destinations from './Components/Destinations';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Testimonials from './Components/Testimonials';
 import Help from './Components/Help';
-import TermsOfService from './Components/TermsOfService';// Adjust the import path as necessary
+import TermsOfService from './Components/TermsOfService';
+import FeedbackForm from './Components/FeedbackForm';
 
-// Import Navbar if needed
+
 
 if (document.getElementById('about-root')) {
     ReactDOM.render(<About />, document.getElementById('about-root'));
@@ -46,4 +47,10 @@ if (document.getElementById('help-root')) {
 
 if (document.getElementById('terms-root')) {
     ReactDOM.render(<TermsOfService />, document.getElementById('terms-root'));
+}
+
+
+
+if (document.getElementById('feedback-root')) {
+    ReactDOM.render(<FeedbackForm />, document.getElementById('feedback-root'));
 }

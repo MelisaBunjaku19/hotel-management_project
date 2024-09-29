@@ -20,6 +20,7 @@ use App\Http\Controllers\RoomExportController;
 use App\Http\Controllers\BlogExportController;
 use App\Http\Controllers\UsersImportController;
 use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\FeedbackController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -308,3 +309,12 @@ Route::get('/help', function () {
 Route::get('/terms', function () {
     return view('home.terms');
 });
+
+
+
+
+Route::get('/feedback', function () {
+    return view('home.feedback'); // Blade view that contains the React app
+});
+
+Route::post('/feedback', [FeedbackController::class, 'store']);
