@@ -300,7 +300,7 @@
           <img src="{{ asset('images/blogimage.jpg') }}" alt="Read Blogs" class="img-fluid">
           <div class="blog-info">
             <h3>Read Our Latest Blogs</h3>
-            <p>Stay updated with our latest news and offers.</p>
+            <p>Stay updated with our latest blogs.</p>
             <a href="{{ route('blog.index') }}" class="btn btn-primary">View Blogs</a>
           </div>
         </div>
