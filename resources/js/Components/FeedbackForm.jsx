@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import feedbackImage from '../images/feedback.jpg'; // Import your image
 
 // FeedbackForm Component
 const FeedbackForm = () => {
@@ -48,54 +49,57 @@ const FeedbackForm = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Feedback Form</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Message:</label>
-          <textarea
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            style={{ ...styles.input, height: '100px' }}
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          style={{ ...styles.button, ...(buttonHover ? styles.buttonHover : {}) }}  // Use dynamic styles
-          onMouseEnter={() => setButtonHover(true)}  // Hover effect
-          onMouseLeave={() => setButtonHover(false)}  // Hover effect
-        >
-          Submit Feedback
-        </button>
-      </form>
-      {statusMessage && (
-        <div style={styles.notification(statusMessage.type)}>
-          {statusMessage.text}
-        </div>
-      )}
+      <div style={styles.formContainer}>
+        <h2 style={styles.heading}>Feedback Form</h2>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Message:</label>
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              style={{ ...styles.input, height: '100px' }}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            style={{ ...styles.button, ...(buttonHover ? styles.buttonHover : {}) }}  // Use dynamic styles
+            onMouseEnter={() => setButtonHover(true)}  // Hover effect
+            onMouseLeave={() => setButtonHover(false)}  // Hover effect
+          >
+            Submit Feedback
+          </button>
+        </form>
+        {statusMessage && (
+          <div style={styles.notification(statusMessage.type)}>
+            {statusMessage.text}
+          </div>
+        )}
+      </div>
+      <img src={feedbackImage} alt="Feedback" style={styles.image} /> {/* Image on the right */}
     </div>
   );
 };
@@ -104,7 +108,7 @@ const FeedbackForm = () => {
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
@@ -112,6 +116,17 @@ const styles = {
     padding: '20px',
     fontFamily: 'Arial, sans-serif',
   },
+  formContainer: {
+    width: '100%',
+    maxWidth: '500px',
+  },
+  image: {
+    width: '100%', // Make the image take the full width of its container
+    maxWidth: '500px', // Set the maximum width to match the form
+    height: 'auto', // Maintain aspect ratio automatically
+    marginLeft: '30px',
+    marginBottom: '5px' // Space between form and image
+},
   heading: {
     fontSize: '28px',
     marginBottom: '20px',
@@ -120,7 +135,6 @@ const styles = {
   },
   form: {
     width: '100%',
-    maxWidth: '500px',
     backgroundColor: '#2c2c2e', // Darker background for the form
     padding: '20px',
     borderRadius: '10px',
@@ -189,7 +203,6 @@ const fadeInAnimation = `
   }
   100% {
     opacity: 1;
-  }
 }`;
 
 // Append keyframes to the document
