@@ -8,7 +8,9 @@ import Navbar from './Components/Navbar';
 import HotelPamphlet from './Components/HotelPamphlet';
 import Destinations from './Components/Destinations';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Testimonials from './Components/Testimonials'; // Adjust the import path as necessary
+import Testimonials from './Components/Testimonials';
+import Help from './Components/Help';
+import TermsOfService from './Components/TermsOfService';// Adjust the import path as necessary
 
 // Import Navbar if needed
 
@@ -34,4 +36,14 @@ if (document.getElementById('destinations-root')) {
 // Render the Testimonials component in the specified root element
 if (document.getElementById('testimonials-root')) {
     ReactDOM.render(<Testimonials />, document.getElementById('testimonials-root'));
+}
+
+
+
+if (document.getElementById('help-root')) {
+    ReactDOM.render(<Help />, document.getElementById('help-root'));
+}
+
+if (document.getElementById('terms-root')) {
+    ReactDOM.render(<TermsOfService />, document.getElementById('terms-root'));
 }

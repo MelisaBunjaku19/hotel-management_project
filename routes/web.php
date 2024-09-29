@@ -299,3 +299,12 @@ Route::post('/subscribe', [App\Http\Controllers\SubscriberController::class, 'st
 Route::get('/testimonials', function () {
     return view('home.testimonials');
 });
+
+// routes/web.php
+Route::get('/help', function () {
+    return view('home.help');
+});
+
+Route::get('/terms', function () {
+    return view('home.terms');
+});

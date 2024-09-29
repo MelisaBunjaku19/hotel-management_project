@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Pamphlet</title>
+    <title>Hotel Pamphlet - OnlineHotel</title>
     @viteReactRefresh <!-- Enables React's hot reloading during development -->
     @vite('resources/js/app.jsx') <!-- Ensure this matches the correct JS entry file -->
 </head>

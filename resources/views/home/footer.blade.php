@@ -7,7 +7,7 @@
                     <ul class="conta">
                         <li><i class="fa fa-map-marker" aria-hidden="true"></i> Address</li>
                         <li><i class="fa fa-mobile" aria-hidden="true"></i> +01 1234569540</li>
-                        <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> demo@gmail.com</a></li>
+                        <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> support@onlinehotel.com</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
@@ -44,8 +44,10 @@
                     <ul class="link_menu">
                         <li><a href="destinations">Destinations</a></li>
                         <li><a href="hotel-pamphlet">Hotel Pamphlet</a></li>
-                        <li><a href="testimonials">Our user testimonials!</a></li>
-                      </ul>
+                        <li><a href="testimonials">Testimonials</a></li>
+                        <li><a href="help">Help</a></li>
+                        <li><a href="terms">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
