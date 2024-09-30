@@ -318,3 +318,13 @@ Route::get('/feedback', function () {
 });
 
 Route::post('/feedback', [FeedbackController::class, 'store']);
+
+
+
+Route::get('/firebase', function () {
+    return view('layouts.firebase'); // Blade view that contains the React app
+});
+
+Route::get('/firebase-rooms', function () {
+    return view('layouts.firebase-rooms'); // Blade view that contains the React app
+});
