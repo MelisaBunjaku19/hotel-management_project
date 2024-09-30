@@ -19,21 +19,22 @@ class BlogController extends Controller
         // Start building the query for blogs
         $query = Blog::with('category')->withCount('likes');
     
-        // Handle the "unordered" sort option separately
+        // Apply the search query only if it's provided
+        if ($searchQuery) {
+            // Use full-text search for the title
+            $query->whereRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE)", [$searchQuery]);
+        }
+    
+        // Filter by category if provided
+        if ($category) {
+            $query->where('category_id', $category);
+        }
+    
+        // Handle sorting based on user input
         if ($sortBy == 'unordered') {
-            // When "unordered" is selected, do not apply any filters, just get all posts in random order
+            // When "unordered" is selected, get results in random order
             $blogs = $query->inRandomOrder()->paginate(6);
         } else {
-            // Full-Text Search by title
-            if ($searchQuery) {
-                $query->whereRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE)", [$searchQuery]);
-            }
-    
-            // Filter by category
-            if ($category) {
-                $query->where('category_id', $category);
-            }
-    
             // Sorting based on user input (other than unordered)
             if ($sortBy == 'most_liked') {
                 $query->orderBy('likes_count', 'desc');
@@ -61,7 +62,6 @@ class BlogController extends Controller
     
         return view('home.blog', compact('blogs', 'categories'));
     }
-    
     
 
     public function toggleLike(Blog $blog)

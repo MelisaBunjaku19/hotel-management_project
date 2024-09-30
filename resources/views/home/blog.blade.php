@@ -15,7 +15,6 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
  
-
     <style>
         /* Custom styles for the blog page */
         .blog .titlepage h2 {
@@ -96,8 +95,7 @@
             margin-bottom: 20px;
         }
         .search-form input[type="text"],
-        .search-form select,
-        .search-form input[type="date"] {
+        .search-form select {
             border-radius: 0;
         }
         .search-form button {
@@ -110,8 +108,33 @@
             background-color: #212529;
             border-color: #212529;
         }
-        .highlight {
-            background-color: yellow; /* Highlight color */
+
+        /* Additional styles for pagination and category colors */
+        .pagination {
+            justify-content: center; /* Center pagination */
+            margin: 20px 0; /* Margin above and below */
+        }
+        .pagination .page-item {
+            margin: 0 2px; /* Reduced space between pagination items */
+        }
+        .pagination .page-link {
+            padding: 5px 8px; /* Smaller padding */
+            font-size: 12px; /* Smaller font size */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #343a40; /* Background color for links */
+            color: white; /* Text color */
+        }
+        .pagination .page-link:hover {
+            background-color: #495057; /* Darker background on hover */
+            color: white; /* Keep text color white on hover */
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #007bff; /* Active page background color */
+            color: white; /* Active page text color */
+            border: none; /* Remove border for active link */
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d; /* Disabled link color */
         }
 
         /* Colors for specific categories */
@@ -122,149 +145,101 @@
         .category-technology { background-color: #dc3545; }
         .category-destinations { background-color: #6f42c1; }
         .category-tips { background-color: #fd7e14; }
-
-
-        .like-count {
-    display: flex;
-    align-items: center;
-    margin-top: 10px; /* Adjust space above */
-    font-weight: bold; /* Make the text bold */
-}
-.like-count i {
-    margin-right: 5px; /* Space between icon and number */
-    transition: color 0.3s ease; /* Smooth transition on hover */
-}
-.like-count i:hover {
-    color: darkred; /* Change color on hover */
-}
-.highlight {
-    background-color: yellow; /* Highlight background */
-    font-weight: bold;        /* Bold font to make it stand out */
-}
-
-.pagination {
-        justify-content: center; /* Center pagination */
-        margin: 20px 0; /* Margin above and below */
-    }
-    .pagination .page-item {
-        margin: 0 2px; /* Reduced space between pagination items */
-    }
-    .pagination .page-link {
-        padding: 5px 8px; /* Smaller padding */
-        font-size: 12px; /* Smaller font size */
-        border-radius: 5px; /* Rounded corners */
-        background-color: #343a40; /* Background color for links */
-        color: white; /* Text color */
-    }
-    .pagination .page-link:hover {
-        background-color: #495057; /* Darker background on hover */
-        color: white; /* Keep text color white on hover */
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #007bff; /* Active page background color */
-        color: white; /* Active page text color */
-        border: none; /* Remove border for active link */
-    }
-    .pagination .page-item.disabled .page-link {
-        color: #6c757d; /* Disabled link color */
-    }
-
-
     </style>
 </head>
 <body>
-
     <!-- Header -->
     @include('home.header')
 
     <!-- Blog Section -->
     <div class="blog">
         <div class="container">
-            <!-- Search Form -->
-   <!-- Search Form -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="search-form">
-            <form method="GET" action="{{ route('blog.index') }}">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="searchQuery" placeholder="Search blogs by title" value="{{ request()->input('searchQuery') }}">
-                    
-                    <!-- Category Filter -->
-                    <select class="form-control" name="category">
-                        <option value="">All Categories</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="search-form">
+                        <form method="GET" action="{{ route('blog.index') }}">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="searchQuery" placeholder="Search blogs by title" value="{{ request()->input('searchQuery') }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <select class="form-control" name="category">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                    <!-- Sort by Likes Filter -->
-                    <select class="form-control" name="sortBy">
-    <option value="unordered" {{ request()->input('sortBy') == 'unordered' ? 'selected' : '' }}>Sort by: Unordered</option>
-    <option value="created_at" {{ request()->input('sortBy') == 'created_at' ? 'selected' : '' }}>Sort by: Newest</option>
-    <option value="oldest" {{ request()->input('sortBy') == 'oldest' ? 'selected' : '' }}>Sort by: Oldest</option>
-    <option value="most_liked" {{ request()->input('sortBy') == 'most_liked' ? 'selected' : '' }}>Sort by: Most Liked</option>
-</select>
+                                <select class="form-control" name="sortBy">
+                                    <option value="unordered" {{ request()->input('sortBy') == 'unordered' ? 'selected' : '' }}>Sort by: Unordered</option>
+                                    <option value="created_at" {{ request()->input('sortBy') == 'created_at' ? 'selected' : '' }}>Sort by: Newest</option>
+                                    <option value="oldest" {{ request()->input('sortBy') == 'oldest' ? 'selected' : '' }}>Sort by: Oldest</option>
+                                    <option value="most_liked" {{ request()->input('sortBy') == 'most_liked' ? 'selected' : '' }}>Sort by: Most Liked</option>
+                                </select>
 
-                    </select>
-
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Apply</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-            </form>
-        </div>
-        <div class="titlepage text-center">
-            <h2>Blog</h2>
-            <p>Discover our latest updates and stories on hotel management, travel tips, and more.</p>
-        </div>
-    </div>
-</div>
-
-<!-- Blog Posts -->
-<div class="row">
-    @forelse($blogs as $blog)
-        <div class="col-md-4 col-sm-6 mb-4">
-            <div class="card blog_card">
-                <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $blog->title }}</h5>
-                    @if($blog->category)
-                        <span class="category-label category-{{ strtolower(str_replace(' ', '-', $blog->category->name)) }}">
-                            {{ $blog->category->name }}
-                        </span>
-                    @endif
-                    <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
-
-                    <!-- Like Count -->
-                    <div class="like-count">
-                        <i class="fas fa-heart" style="color: red; font-size: 20px;"></i>
-                        <span style="margin-left: 5px; font-size: 16px;">{{ $blog->likes->count() }}</span>
-                    </div>
-
-                    <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-primary">Read More</a>
                 </div>
             </div>
-        </div>
-    @empty
-        <div class="col-md-12">
-            <p>No blog posts found.</p>
-        </div>
-    @endforelse
-</div>
-<div class="d-flex justify-content-center">
-            {{ $blogs->links('pagination::bootstrap-4', ['prevText' => 'Previous', 'nextText' => 'Next']) }}
-        </div>
+
+            <div class="titlepage text-center">
+                <h2>Blog</h2>
+                <p>Discover our latest updates and stories on hotel management, travel tips, and more.</p>
+            </div>
+
+            <!-- Blog Posts -->
+            <div class="row">
+                @forelse($blogs as $blog)
+                    <div class="col-md-4 col-sm-6 mb-4">
+                        <div class="card blog_card">
+                            <img src="{{ asset('images/' . $blog->image) }}" alt="{{ $blog->title }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $blog->title }}</h5>
+                                @if($blog->category)
+                                    <span class="category-label category-{{ strtolower(str_replace(' ', '-', $blog->category->name)) }}">
+                                        {{ $blog->category->name }}
+                                    </span>
+                                @endif
+                                <p class="card-text">{{ Str::limit($blog->content, 100) }}</p>
+
+                                <!-- Like Count -->
+                                <div class="like-count">
+                                    <i class="fas fa-heart" style="color: red; font-size: 20px;"></i>
+                                    <span style="margin-left: 5px; font-size: 16px;">{{ $blog->likes()->count() }} Likes</span>
+                                </div>
+
+                                <a href="{{ route('home.blog_details', $blog->id) }}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-info">No blogs found.</div>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center">
+                {{ $blogs->links('pagination::bootstrap-4', ['prevText' => 'Previous', 'nextText' => 'Next']) }}
+            </div>
 
         </div>
     </div>
-
-
 
     <!-- Footer -->
     @include('home.footer')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- JavaScript -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
