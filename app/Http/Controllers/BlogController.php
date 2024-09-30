@@ -17,37 +17,47 @@ class BlogController extends Controller
         $sortBy = $request->input('sortBy');
     
         // Start building the query for blogs
-        $query = Blog::with('category')
-                    ->withCount('likes'); 
+        $query = Blog::with('category')->withCount('likes');
     
-        // Search by title
-        if ($searchQuery) {
-            $query->where('title', 'like', '%' . $searchQuery . '%');
-        }
-    
-        // Filter by category
-        if ($category) {
-            $query->where('category_id', $category);
-        }
-    
-        // Sorting based on user input
-        if ($sortBy == 'most_liked') {
-            $query->orderBy('likes_count', 'desc');
-        } elseif ($sortBy == 'created_at') {
-            $query->orderBy('created_at', 'desc');
+        // Handle the "unordered" sort option separately
+        if ($sortBy == 'unordered') {
+            // When "unordered" is selected, do not apply any filters, just get all posts in random order
+            $blogs = $query->inRandomOrder()->paginate(6);
         } else {
-            $query->orderBy('id', 'asc'); // Default sort
+            // Full-Text Search by title
+            if ($searchQuery) {
+                $query->whereRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE)", [$searchQuery]);
+            }
+    
+            // Filter by category
+            if ($category) {
+                $query->where('category_id', $category);
+            }
+    
+            // Sorting based on user input (other than unordered)
+            if ($sortBy == 'most_liked') {
+                $query->orderBy('likes_count', 'desc');
+            } elseif ($sortBy == 'created_at') {
+                $query->orderBy('created_at', 'desc'); // Newest
+            } elseif ($sortBy == 'oldest') {
+                $query->orderBy('created_at', 'asc'); // Oldest
+            } else {
+                $query->orderBy('id', 'asc'); // Default sort
+            }
+    
+            // Get the paginated results
+            $blogs = $query->paginate(6);
         }
     
-        // Get paginated results and append query parameters
-        $blogs = $query->paginate(6)->appends([
+        // Fetch all categories for the filter
+        $categories = Category::all();
+    
+        // Append query parameters to pagination links
+        $blogs->appends([
             'searchQuery' => $searchQuery,
             'category' => $category,
             'sortBy' => $sortBy,
         ]);
-    
-        // Fetch all categories for the filter
-        $categories = Category::all();
     
         return view('home.blog', compact('blogs', 'categories'));
     }

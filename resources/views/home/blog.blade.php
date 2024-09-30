@@ -14,19 +14,7 @@
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/your-icon.png') }}" type="image/png" />
-    @php
-function highlight($text, $searchQuery) {
-    if (!$searchQuery) {
-        return $text;
-    }
-
-    // Escape special characters from the search query
-    $escapedSearch = preg_quote($searchQuery, '/');
-    
-    // Match the whole word, adding word boundaries using \b
-    return preg_replace('/\b(' . $escapedSearch . ')\b/iu', '<span class="highlight">$1</span>', $text);
-}
-@endphp
+ 
 
     <style>
         /* Custom styles for the blog page */
@@ -213,11 +201,11 @@ function highlight($text, $searchQuery) {
 
                     <!-- Sort by Likes Filter -->
                     <select class="form-control" name="sortBy">
-    <option value="">Sort by: Unordered</option> <!-- "Unordered" option -->
+    <option value="unordered" {{ request()->input('sortBy') == 'unordered' ? 'selected' : '' }}>Sort by: Unordered</option>
     <option value="created_at" {{ request()->input('sortBy') == 'created_at' ? 'selected' : '' }}>Sort by: Newest</option>
+    <option value="oldest" {{ request()->input('sortBy') == 'oldest' ? 'selected' : '' }}>Sort by: Oldest</option>
     <option value="most_liked" {{ request()->input('sortBy') == 'most_liked' ? 'selected' : '' }}>Sort by: Most Liked</option>
 </select>
-
 
                     </select>
 
