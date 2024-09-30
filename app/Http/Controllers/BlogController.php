@@ -11,40 +11,48 @@ class BlogController extends Controller
 {
     // Display all blogs with optional search and category filtering
     public function index(Request $request)
-{
-    $searchQuery = $request->input('searchQuery');
-    $category = $request->input('category');
-    $sortBy = $request->input('sortBy');
-
-    // Start building the query for blogs
-    $query = Blog::with('category', 'likes'); // Include related models
-
-    // Search by title
-    if ($searchQuery) {
-        $query->where('title', 'like', '%' . $searchQuery . '%');
+    {
+        $searchQuery = $request->input('searchQuery');
+        $category = $request->input('category');
+        $sortBy = $request->input('sortBy');
+    
+        // Start building the query for blogs
+        $query = Blog::with('category')
+                    ->withCount('likes'); 
+    
+        // Search by title
+        if ($searchQuery) {
+            $query->where('title', 'like', '%' . $searchQuery . '%');
+        }
+    
+        // Filter by category
+        if ($category) {
+            $query->where('category_id', $category);
+        }
+    
+        // Sorting based on user input
+        if ($sortBy == 'most_liked') {
+            $query->orderBy('likes_count', 'desc');
+        } elseif ($sortBy == 'created_at') {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->orderBy('id', 'asc'); // Default sort
+        }
+    
+        // Get paginated results and append query parameters
+        $blogs = $query->paginate(6)->appends([
+            'searchQuery' => $searchQuery,
+            'category' => $category,
+            'sortBy' => $sortBy,
+        ]);
+    
+        // Fetch all categories for the filter
+        $categories = Category::all();
+    
+        return view('home.blog', compact('blogs', 'categories'));
     }
-
-    // Filter by category
-    if ($category) {
-        $query->where('category_id', $category);
-    }
-
-    // Sorting based on user input
-    if ($sortBy == 'most_liked') {
-        $query->withCount('likes')->orderBy('likes_count', 'desc');
-    } elseif ($sortBy == 'created_at') {
-        $query->orderBy('created_at', 'desc');
-    } else {
-        $query->orderBy('id', 'asc'); // Default sort
-    }
-
-    // Get all blogs with simple pagination
-    $blogs = $query->simplePaginate(6); // Adjust the number per page as needed
-    $categories = Category::all(); // Fetch all categories for the filter
-
-    return view('home.blog', compact('blogs', 'categories'));
-}
-
+    
+    
 
     public function toggleLike(Blog $blog)
     {
