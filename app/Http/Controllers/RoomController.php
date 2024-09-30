@@ -14,6 +14,9 @@ class RoomController extends Controller
         // Fetch all rooms query
         $query = Room::query();
     
+        // Fetch the booked rooms by querying the bookings table
+        $bookedRoomIds = Booking::pluck('room_id')->toArray();
+    
         // Apply room type filter if provided
         if ($request->filled('room_type')) {
             $query->where('room_type', $request->input('room_type'));
@@ -46,18 +49,33 @@ class RoomController extends Controller
             $query->where('wifi', $wifiValue);
         }
     
+        // Apply booking status filter if provided
+        if ($request->filled('booking_status')) {
+            $bookingStatus = $request->input('booking_status');
+    
+            if ($bookingStatus === 'booked') {
+                // Filter for booked rooms
+                $query->whereIn('id', $bookedRoomIds);
+            } elseif ($bookingStatus === 'available') {
+                // Filter for available rooms
+                $query->whereNotIn('id', $bookedRoomIds);
+            } elseif ($bookingStatus === 'booked_by_me') {
+                // Filter for rooms booked by the logged-in user
+                $userBookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
+                $query->whereIn('id', $userBookedRoomIds);
+            }
+        }
+    
         // Fetch the filtered rooms
         $rooms = $query->get();
     
-        // Fetch the booked rooms by querying the bookings table
-        $bookedRoomIds = Booking::pluck('room_id')->toArray();
-    
-        // Fetch the rooms booked by the logged-in user
+        // Fetch the rooms booked by the logged-in user for displaying separately if needed
         $userBookedRoomIds = Booking::where('user_id', auth()->id())->pluck('room_id')->toArray();
     
         // Return the view and pass the necessary data
         return view('home.rooms', compact('rooms', 'bookedRoomIds', 'userBookedRoomIds'));
     }
+    
     
     
     

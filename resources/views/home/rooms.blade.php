@@ -237,6 +237,17 @@
                     </select>
                 </div>
 
+                <div class="form-group col-md-2">
+    <label for="booking_status">Booking Status</label>
+    <select name="booking_status" id="booking_status" class="form-control">
+        <option value="">Any</option>
+        <option value="booked" {{ request('booking_status') == 'booked' ? 'selected' : '' }}>Booked</option>
+        <option value="available" {{ request('booking_status') == 'available' ? 'selected' : '' }}>Available</option>
+        <option value="booked_by_me" {{ request('booking_status') == 'booked_by_me' ? 'selected' : '' }}>Booked By Me</option>
+    </select>
+</div>
+
+
                 <div class="form-group col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary btn-lg w-100">Apply Filters</button>
                 </div>
@@ -244,6 +255,7 @@
         </form>
     </div>
 </div>
+
 
 
 <div class="row">
