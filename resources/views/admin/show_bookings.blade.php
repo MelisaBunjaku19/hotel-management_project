@@ -64,8 +64,9 @@
                                             <th>Room Title</th>
                                             <th>Arrival Date</th>
                                             <th>Departure Date</th>
-                                            <th>Amount Paid</th>
-                                       
+                                            <th>
+                                                <i class="fa fa-credit-card"></i> Amount Paid
+                                            </th>
                                             <th>User</th>
                                         </tr>
                                     </thead>
@@ -76,8 +77,9 @@
                                                 <td>{{ $booking->room->room_title }}</td>
                                                 <td>{{ $booking->arrival_date }}</td>
                                                 <td>{{ $booking->departure_date }}</td>
-                                                <td>${{ number_format($booking->amount_paid, 2) }}</td>
-                                              
+                                                <td>
+                                                    <i class="fa fa-cc-stripe"></i> ${{ number_format($booking->amount_paid, 2) }}
+                                                </td>
                                                 <td>{{ $booking->user->name ?? 'N/A' }}</td>
                                             </tr>
                                         @endforeach
