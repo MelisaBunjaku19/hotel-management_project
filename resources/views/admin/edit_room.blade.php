@@ -42,7 +42,7 @@
         <!-- Back to Room List Button -->
         <div class="text-center mb-3">
             <a href="{{ route('admin.index_room') }}" class="btn btn-secondary">
-                <i class="fa fa-arrow-left"></i> Back to Room List
+                <i class="fa fa-arrow-left"></i> Back to Rooms List
             </a>
         </div>
 
