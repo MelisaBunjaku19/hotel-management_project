@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use App\Models\Room;
 
 
 
@@ -172,6 +177,48 @@ class AdminController extends Controller
         return redirect()->route('admin.show_users')->with('success', 'User deleted successfully.');
     }
 
+    public function showImportPage()
+    {
+        return view('admin.import_data'); // Your view to upload files
+    }
 
+    // Process the import
+    public function processImport(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        // Handle the uploaded file
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+        
+        // Use the appropriate reader based on the file extension
+        if ($extension === 'xlsx') {
+            $reader = new Xlsx();
+        } elseif ($extension === 'xls') {
+            $reader = new Xls();
+        } elseif ($extension === 'csv') {
+            $reader = new Csv();
+        } else {
+            return redirect()->back()->withErrors('Invalid file type!');
+        }
+
+        // Load the spreadsheet data
+        $spreadsheet = $reader->load($file->getRealPath());
+
+        // Get the data from the first sheet
+        $data = $spreadsheet->getActiveSheet()->toArray();
+
+        // Process the data as needed; here it's passed to the view
+        return view('admin.display_data', compact('data')); // Pass the data to the display view
+    }
+
+    public function showImportedRooms()
+{
+    $rooms = Room::all(); // Fetch all rooms; adjust based on your import logic.
+    return view('admin.imported_rooms', compact('rooms'));
+}
 
 }  

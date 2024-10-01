@@ -328,3 +328,15 @@ Route::get('/firebase', function () {
 Route::get('/firebase-rooms', function () {
     return view('layouts.firebase-rooms'); // Blade view that contains the React app
 });
+
+
+
+
+Route::get('/import-data', [AdminController::class, 'showImportPage'])->name('admin.import_data');
+
+// Route to process the uploaded file
+Route::post('/import-data', [AdminController::class, 'processImport'])->name('admin.process_import');
+
+
+
+Route::get('/display-data', [AdminController::class, 'displayData'])->name('admin.display_data');
